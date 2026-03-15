@@ -16,7 +16,8 @@ const count = ref(0)
     </div>
     <div>
       <h1 class="text-amber-200">Bujrum</h1>
-
+      <router-link to="/clubs"><p class="underline">Pismina Stranica</p></router-link>
+      <router-link to="/login"><p class="underline">Login</p></router-link>
     </div>
   </section>
 
@@ -27,7 +28,7 @@ const count = ref(0)
       <svg class="icon" role="presentation" aria-hidden="true">
         <use href="/icons.svg#documentation-icon"></use>
       </svg>
-      <h2>Documentation</h2>
+      <h2>Documentation Ba</h2>
       <p>Your questions, answered</p>
       <ul>
         <li>
@@ -64,7 +65,7 @@ const count = ref(0)
             <svg class="button-icon" role="presentation" aria-hidden="true">
               <use href="/icons.svg#discord-icon"></use>
             </svg>
-            Discord
+            Kiki
           </a>
         </li>
         <li>
