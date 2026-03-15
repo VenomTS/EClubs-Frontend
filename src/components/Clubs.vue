@@ -27,7 +27,7 @@ export default {
       classrooms: [
         { id: 1, name: "Test classroom 1" },
         { id: 2, name: "Test classroom 2" }
-          //Easiest to be an array, will probably change if it doesn't work well
+          //Easiest to be an array, will probably be changed if it doesn't work well
       ]
     };
   },
