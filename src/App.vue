@@ -1,6 +1,5 @@
 <script setup>
-//Switched to enter the selection page:
-import HelloWorld from './components/Clubs.vue'
+import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>

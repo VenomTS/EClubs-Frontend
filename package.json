@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^0.0.0-insiders.a4be983",
+    "tailwindcss": "^0.0.0-insiders.a4be983",
     "vue": "^3.5.30"
   },
   "devDependencies": {
