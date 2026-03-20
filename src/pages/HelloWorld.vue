@@ -14,9 +14,12 @@ import vueLogo from '../assets/vue.svg'
       <img :src="viteLogo" class="vite" alt="Vite logo" />
     </div>
     <div>
+
       <h1 class="text-amber-200">Bujrum</h1>
       <router-link to="/clubs"><p class="underline">Pismina Stranica</p></router-link>
       <router-link to="/login"><p class="underline">Login</p></router-link>
+      <router-link to="/work-plan"><p class="underline">Work Plan</p></router-link>
+      <router-link to="/bookkeeping"><p class="underline">Book Keeping</p></router-link>
     </div>
   </section>
 

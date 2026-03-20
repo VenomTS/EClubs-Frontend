@@ -294,3 +294,41 @@ code {
     border-right-color: var(--border);
   }
 }
+
+/* ==========================================================================
+   Bilal Styling: WorkPlan & Bookkeeping
+   ========================================================================== */
+@layer components {
+  /* white backround */
+  body {
+    @apply bg-white text-gray-900;
+  }
+
+  /* layout */
+  .wrap { @apply p-8 max-w-6xl mx-auto space-y-8; }
+  .row { @apply flex items-center justify-between; }
+
+  /* typography */
+  .title { @apply text-3xl font-bold; }
+  .sub { @apply text-gray-500 mt-1 text-sm; }
+
+  /* cards & containers */
+  .card { @apply rounded-2xl border border-gray-200 bg-white p-6 shadow-sm; }
+  .modal-bg { @apply fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4; }
+  .modal { @apply bg-white rounded-xl shadow-lg w-full max-w-md p-6; }
+
+  /* buttons */
+  .btn { @apply inline-flex items-center justify-center rounded-lg text-sm font-medium bg-black text-white hover:bg-gray-800 h-10 px-5 transition-colors; }
+  .btn-out { @apply inline-flex items-center justify-center rounded-lg text-sm font-medium border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 h-10 px-4 transition-colors; }
+  .icon-btn { @apply hover:text-gray-900 transition-colors p-1 text-gray-500; }
+  .icon-red { @apply hover:text-red-600 transition-colors p-1 text-gray-500; }
+
+  /* form inputs */
+  .input { @apply w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black; }
+
+  /* badges */
+  .badge { @apply inline-block rounded-full px-2.5 py-0.5 text-xs font-medium mt-2; }
+  .b-plan { @apply bg-gray-100 text-gray-600; }
+  .b-prog { @apply bg-blue-100 text-blue-700; }
+  .b-done { @apply bg-green-100 text-green-800; }
+}
