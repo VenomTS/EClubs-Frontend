@@ -23,4 +23,20 @@
   </div>
 </div>
 
+  <div class="flex justify-center">
+    <div class="border-3 border-b-emerald-500 rounded-2xl w-5xl mt-4 h-auto p-2">
+      <div class="flex gap-4">
+        <div class="shrink-0">
+          <div class="w-10 h-10 ml-8 rounded-full bg-gray-300"></div>
+          <p class="mt-2 text-sm font-light">{Professor_Name}</p>
+        </div>
+
+        <div class="flex-1">
+          <p class="text-gray-700 text-left pr-10">Example of an announcement made by professor.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 </template>
