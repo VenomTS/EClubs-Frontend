@@ -1,7 +1,7 @@
 <script setup>
-
+import Stream from "../components/Stream.vue"
 </script>
 
 <template>
-<h1>Hi</h1>
+  <Stream/>
 </template>
