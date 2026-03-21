@@ -1,5 +1,4 @@
 <script setup>
-import { ref } from 'vue'
 import viteLogo from '../assets/vite.svg'
 import heroImg from '../assets/hero.png'
 import vueLogo from '../assets/vue.svg'
@@ -20,6 +19,7 @@ import vueLogo from '../assets/vue.svg'
       <router-link to="/login"><p class="underline">Login</p></router-link>
       <router-link to="/work-plan"><p class="underline">Work Plan</p></router-link>
       <router-link to="/bookkeeping"><p class="underline">Book Keeping</p></router-link>
+      <router-link to="/clubpage"><p>ClubPage</p></router-link>
     </div>
   </section>
 

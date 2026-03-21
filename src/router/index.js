@@ -5,6 +5,8 @@ import Clubs from "../components/Clubs.vue"
 import Login from "../pages/LoginPage.vue"
 import WorkPlan from '../pages/WorkPlan.vue'
 import Bookkeeping from "../pages/Bookkeeping.vue";
+import ClubPage from "../pages/ClubPage.vue"
+
 const routes = [
     {
         path: "/",
@@ -30,6 +32,11 @@ const routes = [
         path: "/bookkeeping",
         name: "Bookkeeping",
         component: Bookkeeping
+    },
+    {
+        path: "/clubpage",
+        name: "ClubPage",
+        component: ClubPage
     }
 
 ]
