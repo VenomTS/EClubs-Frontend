@@ -1,4 +1,12 @@
 <script setup>
+import { ref } from "vue"
+
+const club = ref({
+  name: "Robotics Club",
+  professor: "Neđad Kadić",
+  students: "24",
+  room: "12"
+})
 
 </script>
 
@@ -14,13 +22,13 @@
 
         <div class="relative h-full flex flex-col justify-end p-6 text-white">
           <h1 class="text-2xl md:text-4xl font-bold">
-            {Club_Name}
+            {{ club.name }}
           </h1>
           <p class="text-sm md:text-lg opacity-90">
-            Professor: {Professor_Name}
+            Professor: {{club.professor}}
           </p>
           <p class="text-xs md:text-sm opacity-75">
-            {Students_Number} Students | Room {Room_Number}
+            {{club.students}} Students | Room {{ club.room }}
           </p>
         </div>
       </div>

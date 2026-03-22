@@ -1,28 +1,81 @@
 <script setup>
-import { ref, computed } from "vue"
+import {ref, computed, onMounted} from "vue"
+import axios from "axios";
 
-const user = ref({
-  name: "Kiki",
-  id: "",
-  role:"professor"
-})
+const clubId = "019d0d1f-4ec5-7681-99b7-41944b697ff6";
 
-const isProfessor = computed(() => user.value.role === "professor")
+const user = {
+  name: "Nedzad",
+  id: "019d1611-2cde-71a3-8aca-cc3875824b88",
+  role: "professor",
+}
+
+const isProfessor = computed(() => user.role === "professor")
 
 const newPost = ref("")
 const posts = ref([])
 
-const addPost = () => {
-  if (!newPost.value.trim()) return
+function formatDateTime(isoString) {
+  const date = new Date(isoString);
 
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  }).format(date);
+}
+
+onMounted(async () =>
+{
+  const options = {
+    method: 'GET',
+    url: 'https://109.237.45.118:8080/api/clubs/' + clubId + '/Messages'
+  };
+
+  try {
+    const { data } = await axios.request(options);
+
+    data.forEach(message =>
+    {
+      addMessageToPosts(message);
+    });
+
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+function addMessageToPosts(message)
+{
   posts.value.unshift({
-    id: Date.now(),
-    author: user.value.name,
-    content: newPost.value,
-    time: new Date().toLocaleString()
+    id: message.id,
+    author: message.sender.firstName + " " + message.sender.lastName,
+    content: message.content,
+    time: formatDateTime(message.sentAt),
   })
+}
 
-  newPost.value = ""
+const addPost = async () =>
+{
+  const options = {
+    method: 'POST',
+    url: 'https://109.237.45.118:8080/api/clubs/' + clubId + '/Messages',
+    headers: {'Content-Type': 'application/json'},
+    data: {senderId: user.id, content: newPost.value}
+  };
+
+  try {
+    const { data } = await axios.request(options);
+    addMessageToPosts(data);
+  } catch (error) {
+    console.error(error);
+  }
+  finally {
+    newPost.value = "";
+  }
 }
 </script>
 
@@ -76,7 +129,7 @@ const addPost = () => {
           <p class="text-gray-800 text-left break-words whitespace-pre-wrap">
             {{ post.content }}
           </p>
-          <p class="text-xs text-gray-500 mt-2">
+          <p class="text-xs text-gray-500 mt-2 ">
             {{ post.time }}
           </p>
         </div>
