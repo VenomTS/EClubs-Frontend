@@ -7,10 +7,6 @@
       <h1 class="title">E-CLUBS</h1>
     </header>
 
-    <div v-if="errorMessage" class="error">
-      {{errorMessage}}
-    </div>
-
     <div class="classroom-grid">
       <button
           v-for="classroom in displayedClassrooms"
@@ -24,8 +20,8 @@
     </div>
   </div>
 
-  <div v-if="showModal" class="modal">
-    <div class="modal-content">
+  <div v-if="showModal" class="modal-overlay">
+    <div class="modal">
       <div class="modal-header">
         <h2>Create a new classroom</h2>
         <button class="close" @click="closeModal">X</button>
@@ -40,8 +36,8 @@
           <option v-for="d in days" :key="d">{{d}}</option>
         </select>
 
-        <input type="text" placeholder="Starting time" v-model="startTimeInput" @input="formatTime('start')" />
-        <input type="text" placeholder="Ending time" v-model="endTimeInput" @input="formatTime('end')" />
+        <input type="text" placeholder="Starting time (00:00)" v-model="startTimeInput" @input="formatTime('start')" />
+        <input type="text" placeholder="Ending time (00:00)" v-model="endTimeInput" @input="formatTime('end')" />
       </div>
 
       <div class="modal-footer">
@@ -62,6 +58,7 @@ const closeModal = () => {
   showModal.value = false;
 }
 const errorMessage = ref("");
+errorMessage.value = "Error: please ensure all inputs are valid!";
 
 const classrooms = ref([
   { id: 1, name: "Test classroom 1" },
@@ -78,8 +75,7 @@ const startTimeInput = ref("");
 const endTimeInput = ref("");
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
-
-//Instead of Computed:
+//Classroom spanning::
 const displayedClassrooms = computed(() => {
   if (userRole.value === "professor")
   {
@@ -115,11 +111,10 @@ const formatTime = (type) => {
   return hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59; //Ensures the time entered is valid
   }
 
-  const saveClassroom = () => {
-  errorMessage.value = "";
+  const saveClassroom = async () => {
   if (!newClassroom.value.name || !newClassroom.value.day || !isValidTime(newClassroom.value.start) || !isValidTime(newClassroom.value.end))
   {
-    errorMessage.value = "Error: please insure all inputs are valid!";
+    alert(errorMessage.value);
     return;
   }
 
@@ -151,6 +146,7 @@ const classroomIconClick = () => {
 
 const onAddClassroom = () => {
   showModal.value=true;
+  resetNewClassroomForm();
 };
 
 const handleClick = (classroom) => {
@@ -164,13 +160,6 @@ const handleClick = (classroom) => {
   }
 };
 </script>
-
-
-
-
-
-
-
 
 
 <!-- AI slop: -->
@@ -256,51 +245,99 @@ body {
   font-weight: bold;
 }
 
-.modal {
+/* DARK BACKGROUND OVERLAY */
+.modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.4);
+
+  background: rgba(0, 0, 0, 0.45);
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  z-index: 1000;
 }
 
-.modal-content {
-  background: #d9d9d9;
-  padding: 20px;
+/* ACTUAL POPUP WINDOW */
+.modal {
+  width: 420px;
+  max-width: 90%;
+
+  background: #dcdcdc;
   border-radius: 20px;
-  width: 400px;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+
+  padding: 20px;
+
+  animation: popup 0.2s ease-out;
 }
 
+/* HEADER */
 .modal-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+
+  font-size: 20px;
+  font-weight: bold;
 }
 
+/* CLOSE BUTTON */
 .close {
   background: none;
   border: none;
+  font-size: 18px;
   cursor: pointer;
 }
 
+/* BODY */
 .modal-body {
+  margin-top: 15px;
+
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
-.save {
-  margin-top: 15px;
-  align-self: flex-end;
-}
-
-.error {
-  background: red;
-  color: white;
+/* INPUTS */
+.modal-body input,
+.modal-body select {
   padding: 10px;
-  text-align: center;
+  border-radius: 10px;
+  border: 2px solid #333;
 }
+
+/* FOOTER */
+.modal-footer {
+  margin-top: 15px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* SAVE BUTTON */
+.save {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  background: #bfbfbf;
+  cursor: pointer;
+}
+
+/* POP ANIMATION */
+@keyframes popup {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 </style>
