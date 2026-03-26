@@ -16,11 +16,13 @@ const userStore = useUserStore();
 const mail= ref("")
 const password= ref("")
 
-const status= ref()
-
 async function login() {
   await userStore.login(mail.value, password.value);
-  status.value = userStore.loginSuccessful.value;
+
+  if(userStore.loginSuccessful === true)
+    showGoodToast()
+  else
+    showBadToast()
 }
 
 function showGoodToast() {
@@ -32,12 +34,13 @@ function showGoodToast() {
   });
 }
 
-function testRole()
-{
-  const isDirector = userStore.hasRole(Role.Director)
-  const isAdmin = userStore.hasRole(Role.Admin)
-
-  console.log(isDirector, isAdmin)
+function showBadToast() {
+  toast.add({
+    severity: 'failure',
+    summary: 'You failed',
+    detail: 'Wrong data',
+    life: 3000
+  });
 }
 </script>
 <template>
@@ -64,15 +67,13 @@ function testRole()
             placeholder="Password"
             class="border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-emerald-700"
         />
+        <Toast />
         <button
             class="bg-emerald-700 text-white py-2 rounded-lg hover:bg-emerald-900 transition"
             @click="login"
         >
           Login
         </button>
-
-        <Toast />
-        <Button label="Show" @click="showGoodToast"> Hello World </Button>
 
       </div>
 
