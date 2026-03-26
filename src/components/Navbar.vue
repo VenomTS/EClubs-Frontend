@@ -4,7 +4,7 @@
 
 <template>
   <nav class="bg-emerald-600 text-white shadow-md">
-    <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
 
       <h1 class="text-xl font-bold tracking-wide">
         E-Clubs</h1>
