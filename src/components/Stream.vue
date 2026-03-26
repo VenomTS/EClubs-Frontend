@@ -2,6 +2,7 @@
 import {ref, computed, onMounted} from "vue"
 import axios from "axios";
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const clubId = "019d0d1f-4ec5-7681-99b7-41944b697ff6";
 
 const user = {
@@ -32,7 +33,7 @@ onMounted(async () =>
 {
   const options = {
     method: 'GET',
-    url: 'https://109.237.45.118:8080/api/clubs/' + clubId + '/Messages'
+    url: `${BASE_URL}/clubs/` + clubId + '/Messages'
   };
 
   try {
@@ -62,7 +63,7 @@ const addPost = async () =>
 {
   const options = {
     method: 'POST',
-    url: 'https://109.237.45.118:8080/api/clubs/' + clubId + '/Messages',
+    url: `${BASE_URL}/clubs/` + clubId + '/Messages',
     headers: {'Content-Type': 'application/json'},
     data: {senderId: user.id, content: newPost.value}
   };
