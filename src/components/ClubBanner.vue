@@ -7,7 +7,6 @@ const club = ref({
   students: "24",
   room: "12"
 })
-
 </script>
 
 <template>

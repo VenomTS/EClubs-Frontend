@@ -2,6 +2,7 @@
 import {ref, computed, onMounted} from "vue"
 import axios from "axios";
 import {useUserStore} from "../stores/userStore.js";
+import {Role} from "../interfaces/Role.js";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const clubId = "019d0d1f-4ec5-7681-99b7-41944b697ff6";
@@ -24,10 +25,7 @@ function formatDateTime(isoString) {
   }).format(date);
 }
 
-function isProfessor()
-{
-  return userStore.hasRole(Role.Professor);
-}
+const isProfessor = computed(() => userStore.hasRole(Role.Professor))
 
 onMounted(async () =>
 {
