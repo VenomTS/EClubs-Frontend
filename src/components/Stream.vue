@@ -127,11 +127,11 @@ const addPost = async () =>
           <p class="mt-2 text-sm font-light">{{ post.author }}</p>
         </div>
 
-        <div class="flex-1 min-w-0">
-          <p class="text-gray-800 text-left break-words whitespace-pre-wrap">
+        <div class="flex-1 min-w-0 relative flex flex-col justify-between">
+          <p class="text-gray-800 text-left wrap-break-word whitespace-pre-wrap">
             {{ post.content }}
           </p>
-          <p class="text-xs text-gray-500 mt-2 ">
+          <p class="text-xs text-gray-500 mt-auto">
             {{ post.time }}
           </p>
         </div>

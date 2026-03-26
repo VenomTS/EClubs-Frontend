@@ -1,4 +1,4 @@
-<template>
+  <template>
   <div class="page">
     <header class="header">
       <button class="hamburger" @click="hamburgerMenuClick">

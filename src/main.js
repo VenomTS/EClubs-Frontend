@@ -15,6 +15,8 @@ const app = createApp(App)
 pinia.use(piniaPluginPersistedstate)
 app.use(pinia)
 app.use(router)
-app.use(PrimeVue, { theme: { preset: Aura } } )
+app.use(PrimeVue, {
+    theme: {
+        preset: Aura } } )
 app.use(ToastService)
 app.mount('#app')

@@ -332,3 +332,9 @@ code {
   .b-prog { @apply bg-blue-100 text-blue-700; }
   .b-done { @apply bg-green-100 text-green-800; }
 }
+.p-toast-message-error .p-toast-detail {
+  color: red !important;
+}
+.p-toast-message-success .p-toast-detail {
+  color: green !important;
+}
