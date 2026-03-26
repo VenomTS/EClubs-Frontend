@@ -7,6 +7,7 @@ import WorkPlan from '../pages/WorkPlan.vue'
 import Bookkeeping from "../pages/Bookkeeping.vue";
 import ClubPage from "../pages/ClubPage.vue"
 import AttendancePage from "../pages/AttendancePage.vue";
+import HomePage from "../pages/HomePage.vue";
 
 const routes = [
     {
@@ -43,6 +44,11 @@ const routes = [
         path: "/attendance",
         name: "AttendancePage",
         component: AttendancePage
+    },
+    {
+        path: "/home",
+        name: "HomePage",
+        component: HomePage
     }
 
 ]

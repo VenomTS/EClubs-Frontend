@@ -21,6 +21,8 @@ import vueLogo from '../assets/vue.svg'
       <router-link to="/bookkeeping"><p class="underline">Book Keeping</p></router-link>
       <router-link to="/clubpage"><p>ClubPage</p></router-link>
       <router-link to="attendance"><p>Attendance Page</p></router-link>
+      <router-link to="/home"><p>Home Page</p></router-link>
+
     </div>
   </section>
 
