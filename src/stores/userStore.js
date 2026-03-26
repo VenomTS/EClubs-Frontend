@@ -1,8 +1,13 @@
 import axios from "axios";
 import {defineStore} from "pinia";
 import {reactive} from "vue";
+import { jwtDecode } from "jwt-decode";
+
+import { Role } from "/src/interfaces/Role.js"
 
 export const useUserStore = defineStore('users', () => {
+
+    const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
     const user = reactive({
         token: null,
@@ -12,18 +17,45 @@ export const useUserStore = defineStore('users', () => {
         roles: []
     });
 
-    // function hasRole(role) {
-    //     return user.roles.includes(role);
-    // }
+    function hasRole(role) {
+        return user.roles.values().some(userRole => userRole.name === role.name);
+    }
 
     function parseToken() {
-        //use jwt-decode
+        if (!user.token) return;
+        try{
+            const decoded=jwtDecode(user.token);
+            user.id= decoded.sub;
+            user.firstName=decoded.given_name;
+            user.lastName=decoded.family_name;
+
+            const roles = decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
+
+            user.roles = [];
+
+            roles.forEach(role => {
+                if(role === Role.Student.name)
+                    user.roles.push(Role.Student)
+                else if(role === Role.Professor.name)
+                    user.roles.push(Role.Professor)
+                else if(role === Role.Director.name)
+                    user.roles.push(Role.Director)
+                else if(role === Role.Admin.name)
+                    user.roles.push(Role.Admin)
+            });
+
+            console.log(user);
+
+        }
+        catch (error) {
+            console.error("Token parsing failed:", error);
+        }
     }
 
     async function login(email, password) {
         const options = {
             method: 'POST',
-            url: 'https://109.237.45.118:8080/api/Auth/login',
+            url: `${BASE_URL}/Auth/login`,
             headers: {'Content-Type': 'application/json'},
             data: {mail: email, password: password}
         };
@@ -38,5 +70,5 @@ export const useUserStore = defineStore('users', () => {
         }
     }
 
-    return { user, login };
-})
+    return { user, login, hasRole };
+}, { persist: true });

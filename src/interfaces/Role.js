@@ -1,4 +1,4 @@
-const Role = Object.freeze({
+export const Role = Object.freeze({
     Student:   { name: "Student" },
     Professor:  { name: "Professor" },
     Director: { name: "Director" },

@@ -1,17 +1,12 @@
 <script setup>
 import {ref, computed, onMounted} from "vue"
 import axios from "axios";
+import {useUserStore} from "../stores/userStore.js";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const clubId = "019d0d1f-4ec5-7681-99b7-41944b697ff6";
 
-const user = {
-  name: "Nedzad",
-  id: "019d1611-2cde-71a3-8aca-cc3875824b88",
-  role: "professor",
-}
-
-const isProfessor = computed(() => user.role === "professor")
+const userStore = useUserStore();
 
 const newPost = ref("")
 const posts = ref([])
@@ -29,8 +24,16 @@ function formatDateTime(isoString) {
   }).format(date);
 }
 
+function isProfessor()
+{
+  return userStore.hasRole(Role.Professor);
+}
+
 onMounted(async () =>
 {
+
+  console.log(userStore.user)
+
   const options = {
     method: 'GET',
     url: `${BASE_URL}/clubs/` + clubId + '/Messages'
@@ -65,7 +68,7 @@ const addPost = async () =>
     method: 'POST',
     url: `${BASE_URL}/clubs/` + clubId + '/Messages',
     headers: {'Content-Type': 'application/json'},
-    data: {senderId: user.id, content: newPost.value}
+    data: {senderId: userStore.user.id, content: newPost.value}
   };
 
   try {
@@ -88,7 +91,7 @@ const addPost = async () =>
       <div class="flex gap-3">
 
         <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center font-bold">
-          {{ user.name.charAt(0) }}
+          {{ userStore.user.firstName.charAt(0) }}
         </div>
 
         <textarea
