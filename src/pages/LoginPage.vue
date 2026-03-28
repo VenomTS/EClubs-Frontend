@@ -43,7 +43,7 @@ function showBadToast() {
 }
 </script>
 <template>
-  <div class="min-h-screen flex items-center justify-center">
+  <div class="min-h-screen flex pt-20 justify-center">
 
     <div class="p-8 rounded-xl shadow-md w-80">
 

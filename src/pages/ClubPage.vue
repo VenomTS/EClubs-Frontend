@@ -21,7 +21,7 @@ import TabPanel from 'primevue/tabpanel';
         <TabPanels>
           <TabPanel value="0">
             <p class="m-0">
-              Prvi Header
+            <stream/>
             </p>
           </TabPanel>
           <TabPanel value="1">
