@@ -19,7 +19,7 @@ import type { Configuration } from './configuration';
 import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
 import globalAxios from 'axios';
 
-export const BASE_PATH = "https://109.237.45.118:8080".replace(/\/+$/, "");
+export const BASE_PATH = "https://109.237.44.64:8080".replace(/\/+$/, "");
 
 export const COLLECTION_FORMATS = {
     csv: ",",

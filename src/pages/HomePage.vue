@@ -10,8 +10,6 @@ onMounted(async () => {
   let response = await clubsApi.getClubsForUser("019d0d1a-ddb9-723e-9695-0ae7dce00bb9");
 
   clubs.value = response.data;
-  console.log(clubs.value);
-
 })
 </script>
 

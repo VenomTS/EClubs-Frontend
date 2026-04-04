@@ -2,7 +2,7 @@
 
 import {ref, watch} from "vue";
 import {
-  type ClubMessageResponse,
+  type ClubMessageResponse, ClubMessagesApi,
   type ClubProfessorResponse,
   ClubsApi,
   type ClubWorkPlansResponse,
@@ -33,6 +33,7 @@ watch(
       if(newId == oldId || Array.isArray(newId)) return;
 
       const response = await clubsApi.getClubById(newId);
+
       club.value = response.data;
       messages.value = club.value.messages;
       professor.value = club.value.professor;
@@ -62,7 +63,7 @@ watch(
           <p class="m-0">
             <WorkPlanCard
                 v-for="workPlan in workPlans"
-                :id="workPlan.id" :title="workPlan.title"
+                :id="workPlan.id"
                 :description="workPlan.description"
                 :note="workPlan.note"
                 :scheduledDate="workPlan.scheduledDate"
