@@ -38,7 +38,7 @@ async function createMessage()
   <!-- CREATE POST (samo profesor)-->
   <div v-if="isProfessor" class="flex justify-center mt-2">
 
-    <div class="rounded-2xl shadow p-4 mr-4 w-full max-w-3xl">
+    <div class="rounded-2xl shadow p-5 mr-4 w-full max-w-3xl">
       <div class="flex gap-3">
 
         <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center font-bold">
