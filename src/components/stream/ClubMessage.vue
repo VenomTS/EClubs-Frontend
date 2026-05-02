@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ClubMessageResponse } from "../../api"
+import type { ClubMessageResponse } from "../../../api"
 
 const props = defineProps<ClubMessageResponse>()
 

@@ -6,7 +6,7 @@ import {
   AttendancesApi,
   type ClubMessageResponse,
   ClubsApi, type ClubWorkPlansResponse, type GetAllAttendancesResponse,
-  type GetClubByIdResponse, type GetCurrentWorkPlanResponse, WorkPlansApi,
+  type GetClubByIdResponse, type GetCurrentWorkPlanResponse, type GetDomainsResponse, WorkPlansApi,
 } from "../../api";
 import StreamTab from "../components/clubTabs/StreamTab.vue";
 import WorkPlanTab from "../components/clubTabs/WorkPlanTab.vue";
@@ -21,6 +21,7 @@ const club = ref<GetClubByIdResponse>();
 const messages = ref<ClubMessageResponse[]>();
 const workPlans = ref<ClubWorkPlansResponse[]>();
 const currentWorkPlan = ref<GetCurrentWorkPlanResponse>();
+const domains = ref<GetDomainsResponse[]>();
 const attendances = ref<GetAllAttendancesResponse[]>();
 
 watch(
@@ -34,7 +35,6 @@ watch(
       messages.value = club.value.messages;
       workPlans.value = club.value.workPlans;
 
-      // newest first
       messages.value?.reverse();
 
       try
@@ -56,6 +56,16 @@ watch(
       catch
       {
         console.log("Error pri fetching Attendances");
+      }
+
+      try
+      {
+        const domainsResponse = await workPlansAPI.getDomainsByClubId(newId);
+        domains.value = domainsResponse.data;
+      }
+      catch
+      {
+        console.log("Error pri fetching domains");
       }
     },
     { immediate: true }
@@ -111,17 +121,12 @@ watch(
 
         <TabPanels class="mt-4">
 
-          <!-- STREAM -->
           <TabPanel value="stream">
-
             <StreamTab :messages="messages"/>
-
           </TabPanel>
 
           <TabPanel value="workplans">
-
-            <WorkPlanTab :allWorkPlans="workPlans" :currentWorkPlan="currentWorkPlan" />
-
+            <WorkPlanTab :allWorkPlans="workPlans" :currentWorkPlan="currentWorkPlan"/>
           </TabPanel>
 
           <TabPanel value="students">

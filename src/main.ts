@@ -24,7 +24,7 @@ import Accordion from "primevue/accordion"
 import AccordionPanel from "primevue/accordionpanel"
 import AccordionHeader from "primevue/accordionheader"
 import AccordionContent from "primevue/accordioncontent"
-import {ToastService} from "primevue";
+import {DatePicker, InputChips, InputNumber, Textarea, ToastService} from "primevue";
 import router from "./router.ts";
 import {pinia} from "./pinia.ts";
 import {useUserStore} from "./stores/userStore.ts";
@@ -51,6 +51,7 @@ async function bootstrap()
     app.component('Toast', Toast)
     app.component("ProgressSpinner", ProgressSpinner);
     app.component("Dropdown", Select);
+    app.component("Select", Select);
     app.component("Tabs", Tabs);
     app.component("TabPanel", TabPanel);
     app.component("TabList", TabList);
@@ -62,6 +63,10 @@ async function bootstrap()
     app.component("AccordionPanel", AccordionPanel);
     app.component("AccordionHeader", AccordionHeader);
     app.component("AccordionContent", AccordionContent);
+    app.component("InputNumber", InputNumber);
+    app.component("Textarea", Textarea);
+    app.component("InputChips", InputChips);
+    app.component("DatePicker", DatePicker);
 
 
     app.mount('#app');

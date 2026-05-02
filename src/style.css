@@ -23,11 +23,6 @@
     --highlight-text-color: #6ee7b7;
 }
 
-.p-tabpanels
-{
-    background: transparent !important;
-}
-
 .p-inputtext,
 .p-dropdown {
     @apply rounded-lg;

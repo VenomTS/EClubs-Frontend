@@ -142,6 +142,10 @@ export interface GetCurrentWorkPlanResponse {
     'learningOutcome'?: string;
     'indicator'?: string;
 }
+export interface GetDomainsResponse {
+    'domainNumber'?: number;
+    'domain'?: string;
+}
 export interface GetMeResponse {
     'id'?: string;
     'firstName'?: string;
@@ -1700,6 +1704,39 @@ export const WorkPlansApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        getDomainsByClubId: async (clubId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'clubId' is not null or undefined
+            assertParamExists('getDomainsByClubId', 'clubId', clubId)
+            const localVarPath = `/api/clubs/{clubId}/WorkPlans/domains`
+                .replace(`{${"clubId"}}`, encodeURIComponent(String(clubId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Accept'] = 'text/plain,application/json,text/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} clubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         getWorkPlansForClub: async (clubId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'clubId' is not null or undefined
             assertParamExists('getWorkPlansForClub', 'clubId', clubId)
@@ -1743,7 +1780,7 @@ export const WorkPlansApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createWorkPlanForClub(clubId: string, createWorkPlanRequest: CreateWorkPlanRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CreateWorkPlanResponse>>> {
+        async createWorkPlanForClub(clubId: string, createWorkPlanRequest: CreateWorkPlanRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateWorkPlanResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createWorkPlanForClub(clubId, createWorkPlanRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WorkPlansApi.createWorkPlanForClub']?.[localVarOperationServerIndex]?.url;
@@ -1759,6 +1796,18 @@ export const WorkPlansApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCurrentWorkPlan(clubId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WorkPlansApi.getCurrentWorkPlan']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} clubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getDomainsByClubId(clubId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetDomainsResponse>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDomainsByClubId(clubId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WorkPlansApi.getDomainsByClubId']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -1789,7 +1838,7 @@ export const WorkPlansApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createWorkPlanForClub(clubId: string, createWorkPlanRequest: CreateWorkPlanRequest, options?: RawAxiosRequestConfig): AxiosPromise<Array<CreateWorkPlanResponse>> {
+        createWorkPlanForClub(clubId: string, createWorkPlanRequest: CreateWorkPlanRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateWorkPlanResponse> {
             return localVarFp.createWorkPlanForClub(clubId, createWorkPlanRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1800,6 +1849,15 @@ export const WorkPlansApiFactory = function (configuration?: Configuration, base
          */
         getCurrentWorkPlan(clubId: string, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentWorkPlanResponse> {
             return localVarFp.getCurrentWorkPlan(clubId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} clubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDomainsByClubId(clubId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<GetDomainsResponse>> {
+            return localVarFp.getDomainsByClubId(clubId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1836,6 +1894,16 @@ export class WorkPlansApi extends BaseAPI {
      */
     public getCurrentWorkPlan(clubId: string, options?: RawAxiosRequestConfig) {
         return WorkPlansApiFp(this.configuration).getCurrentWorkPlan(clubId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} clubId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getDomainsByClubId(clubId: string, options?: RawAxiosRequestConfig) {
+        return WorkPlansApiFp(this.configuration).getDomainsByClubId(clubId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

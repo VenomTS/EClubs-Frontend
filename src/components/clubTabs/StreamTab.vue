@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ClubMessage from "../ClubMessage.vue";
+import ClubMessage from "../stream/ClubMessage.vue";
 import {ref} from "vue";
 import {type ClubMessageResponse, ClubMessagesApi} from "../../../api";
 import {useUserStore} from "../../stores/userStore.ts";
