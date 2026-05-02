@@ -1,120 +1,137 @@
-<script setup lang="ts">
+<script lang="ts" setup>
+import { ref, watch } from "vue";
+import { useRoute } from "vue-router";
 
-import {ref, watch} from "vue";
 import {
-  type ClubMessageResponse, ClubMessagesApi,
-  type ClubProfessorResponse,
-  ClubsApi,
-  type ClubWorkPlansResponse,
-  type GetClubByIdResponse
+  AttendancesApi,
+  type ClubMessageResponse,
+  ClubsApi, type ClubWorkPlansResponse, type GetAllAttendancesResponse,
+  type GetClubByIdResponse, type GetCurrentWorkPlanResponse, WorkPlansApi,
 } from "../../api";
+import StreamTab from "../components/clubTabs/StreamTab.vue";
+import WorkPlanTab from "../components/clubTabs/WorkPlanTab.vue";
+import AttendanceTab from "../components/clubTabs/AttendanceTab.vue";
 
-import {useRoute} from "vue-router";
-import Stream from "../components/Stream.vue";
-import WorkPlanCard from "../components/WorkPlanCard.vue";
+const clubsAPI = new ClubsApi();
+const workPlansAPI = new WorkPlansApi();
+const attendancesAPI = new AttendancesApi();
+const route = useRoute();
 
-import Tabs from 'primevue/tabs';
-import TabList from 'primevue/tablist';
-import Tab from 'primevue/tab';
-import TabPanels from 'primevue/tabpanels';
-import TabPanel from 'primevue/tabpanel';
-
-const clubsApi = new ClubsApi();
 const club = ref<GetClubByIdResponse>();
 const messages = ref<ClubMessageResponse[]>();
-const professor = ref<ClubProfessorResponse>();
 const workPlans = ref<ClubWorkPlansResponse[]>();
-
-const route = useRoute();
+const currentWorkPlan = ref<GetCurrentWorkPlanResponse>();
+const attendances = ref<GetAllAttendancesResponse[]>();
 
 watch(
     () => route.params.clubId,
     async (newId, oldId) => {
-      if(newId == oldId || Array.isArray(newId)) return;
+      if (newId == oldId || Array.isArray(newId)) return;
 
-      const response = await clubsApi.getClubById(newId);
+      const response = await clubsAPI.getClubById(newId);
 
       club.value = response.data;
       messages.value = club.value.messages;
-      professor.value = club.value.professor;
       workPlans.value = club.value.workPlans;
+
+      // newest first
+      messages.value?.reverse();
+
+      try
+      {
+        const workPlansResponse = await workPlansAPI.getCurrentWorkPlan(newId);
+        currentWorkPlan.value = workPlansResponse.data;
+      }
+      catch
+      {
+        console.log("Nema Work Plan");
+      }
+
+      try
+      {
+        const attendancesResponse = await attendancesAPI.getAttendancesForClub(newId);
+
+        attendances.value = attendancesResponse.data;
+      }
+      catch
+      {
+        console.log("Error pri fetching Attendances");
+      }
     },
     { immediate: true }
 );
-
 </script>
 
 <template>
+  <div class="min-h-screen bg-surface-background text-content-primary">
+    <div class="border-b border-surface-border bg-surface-card px-6 py-4 space-y-2">
+      <h1 class="text-2xl font-semibold text-primary-400">
+        {{ club?.name }}
+      </h1>
 
-  <div class="card">
-    <Tabs value="0">
-      <TabList>
-        <Tab value="0">Stream</Tab>
-        <Tab value="1">Work Plan</Tab>
-        <Tab value="2">Attendance</Tab>
-      </TabList>
-      <TabPanels>
-        <TabPanel value="0">
-          <p class="m-0">
-            <Stream :messages="messages || []"/>
-          </p>
-        </TabPanel>
-        <TabPanel value="1">
-          <p class="m-0">
-            <WorkPlanCard
-                v-for="workPlan in workPlans"
-                :id="workPlan.id"
-                :description="workPlan.description"
-                :note="workPlan.note"
-                :scheduledDate="workPlan.scheduledDate"
-                :realizationDate="workPlan.realizationDate"
-                :status="workPlan.status"
+      <div class="flex flex-wrap items-center gap-3 text-xs text-content-secondary">
+
+        <!-- DAY -->
+        <span class="flex items-center gap-1 px-2 py-1 rounded-md bg-surface-hover border border-surface-border">
+          <i class="pi pi-calendar text-xs"></i>
+          {{ club?.day }}
+        </span>
+
+        <!-- TIME RANGE -->
+        <span class="flex items-center gap-1 px-2 py-1 rounded-md bg-surface-hover border border-surface-border">
+          <i class="pi pi-clock text-xs"></i>
+          {{ club?.startTime?.slice(0, 5) }} - {{ club?.endTime?.slice(0, 5) }}
+        </span>
+
+        <!-- PROFESSOR -->
+        <span class="flex items-center gap-1 px-2 py-1 rounded-md bg-surface-hover border border-surface-border">
+          <i class="pi pi-user text-xs"></i>
+          {{ club?.professor?.firstName }} {{ club?.professor?.lastName }}
+        </span>
+
+        <!-- CODE -->
+        <span
+            class="flex items-center gap-1 px-2 py-1 rounded-md bg-primary-500/10 border border-primary-500/30 text-primary-400 font-medium"
+        >
+          <i class="pi pi-key text-xs"></i>
+          Code: AAA-BBB
+        </span>
+
+      </div>
+    </div>
+
+    <div class="px-6 py-5">
+      <Tabs value="stream">
+
+        <TabList class="bg-surface-card border border-surface-border rounded-lg px-2">
+          <Tab value="stream">Stream</Tab>
+          <Tab value="workplans">WorkPlans</Tab>
+          <Tab value="students">Students</Tab>
+        </TabList>
+
+        <TabPanels class="mt-4">
+
+          <!-- STREAM -->
+          <TabPanel value="stream">
+
+            <StreamTab :messages="messages"/>
+
+          </TabPanel>
+
+          <TabPanel value="workplans">
+
+            <WorkPlanTab :allWorkPlans="workPlans" :currentWorkPlan="currentWorkPlan" />
+
+          </TabPanel>
+
+          <TabPanel value="students">
+            <AttendanceTab
+                :attendances="attendances"
             />
-          </p>
-        </TabPanel>
-        <TabPanel value="2">
-          <p class="m-0">
-            Treci Header
-          </p>
-        </TabPanel>
-      </TabPanels>
-    </Tabs>
+          </TabPanel>
+
+        </TabPanels>
+      </Tabs>
+    </div>
   </div>
-
 </template>
-
-<style>
-:root{
-  --p-tabs-tablist-border-color: white !important;
-  --p-tabs-tablist-border-width: 0 0 50px 0   !important;
-}
-.p-tablist-tab-list{
-  background-color: white !important;
-  gap:1rem;
-  justify-content: center;
-}
-
-.p-tab{
-  color: black !important;
-  font-weight: 100 !important;
-
-}
-.p-tab:hover{color:green !important;}
-.p-tabpanels{background-color:white !important;}
-.m-0{color:black !important;}
-.p-tablist-tab:hover {
-  color: #059669;
-  background-color: #ecfdf5;
-}
-.p-tablist-tab{
-  color: #059669 !important;
-}
-.p-tablist-tab-list{
-  background-color: white !important;
-}
-
-.p-tab.p-tab-active
-{
-  color: #059669 !important;
-}
-</style>

@@ -19,6 +19,8 @@ import type { Configuration } from './configuration';
 import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
 import globalAxios from 'axios';
 
+globalAxios.defaults.withCredentials = true;
+
 export const BASE_PATH = "https://109.237.44.64:8080".replace(/\/+$/, "");
 
 export const COLLECTION_FORMATS = {
@@ -42,7 +44,7 @@ export class BaseAPI {
             this.basePath = configuration.basePath ?? basePath;
         }
     }
-};
+}
 
 export class RequiredError extends Error {
     constructor(public field: string, msg?: string) {
