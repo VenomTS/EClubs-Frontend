@@ -1,37 +1,32 @@
 <script setup lang="ts">
-import ClubMessage from "../stream/ClubMessage.vue";
-import {ref} from "vue";
-import {type ClubMessageResponse, ClubMessagesApi} from "../../../api";
+import ClubMessageCard from "../stream/ClubMessageCard.vue";
+import {onMounted, ref} from "vue";
+import {ClubMessagesApi, type GetAllMessagesByClubIdResponse} from "../../../api";
 import {useUserStore} from "../../stores/userStore.ts";
-import {useRoute} from "vue-router";
 
 const newMessage = ref("");
 const textareaRef = ref<HTMLTextAreaElement | null>(null);
+const messages = ref<GetAllMessagesByClubIdResponse[]>([]);
 const clubMessagesAPI = new ClubMessagesApi();
 const userStore = useUserStore();
 
-const route = useRoute();
-
 const props = defineProps<{
-  messages: ClubMessageResponse[] | undefined;
+  clubId: string
 }>();
 
 async function sendMessage() {
   if (!newMessage.value?.trim()) return;
 
-  const clubId = route.params.clubId;
-  if (Array.isArray(clubId)) return;
-
   const userId = userStore.userId;
 
-  const response = await clubMessagesAPI.createMessageForClub(clubId, {
+  const response = await clubMessagesAPI.createMessageForClub(props.clubId, {
     senderId: userId,
     content: newMessage.value.trim(),
   });
 
   const createdMessage = response.data;
 
-  props.messages?.unshift({
+  messages.value.unshift({
     id: createdMessage.id,
     sender: createdMessage.sender,
     content: createdMessage.content,
@@ -57,6 +52,14 @@ function handleKeyDown(e: KeyboardEvent) {
     sendMessage();
   }
 }
+
+onMounted(async () => {
+  try {
+    const response = await clubMessagesAPI.getMessagesForClub(props.clubId);
+    messages.value = response.data;
+  }
+  catch(error) {}
+})
 </script>
 
 <template>
@@ -99,7 +102,7 @@ function handleKeyDown(e: KeyboardEvent) {
         </p>
       </div>
 
-      <ClubMessage
+      <ClubMessageCard
           v-for="message in messages"
           v-else
           :key="message.id"

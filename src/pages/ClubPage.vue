@@ -114,7 +114,7 @@ watch(
         <TabPanels class="mt-4">
 
           <TabPanel value="stream">
-            <StreamTab :messages="messages"/>
+            <StreamTab :clubId="clubId"/>
           </TabPanel>
 
           <TabPanel value="workplans">
