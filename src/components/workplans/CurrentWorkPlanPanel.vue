@@ -1,14 +1,24 @@
 <script setup lang="ts">
-import {type GetCurrentWorkPlanResponse, WorkPlansApi} from "../../../api"
+import {
+  type GetCurrentWorkPlanResponse,
+  WorkPlansApi
+} from "../../../api"
+
 import Button from "primevue/button"
-import {onMounted, ref} from "vue";
+import { onMounted, ref } from "vue"
 
 const props = defineProps<{
   clubId: string
-}>();
+}>()
 
-const workPlan = ref<GetCurrentWorkPlanResponse>({});
-const workPlansAPI = new WorkPlansApi();
+const emit = defineEmits<{
+  (e: "save", payload: {
+    workPlanId: string
+  }): void
+}>()
+
+const workPlan = ref<GetCurrentWorkPlanResponse>({})
+const workPlansAPI = new WorkPlansApi()
 
 const getIndicators = (value?: string) => {
   if (!value) return []
@@ -17,11 +27,16 @@ const getIndicators = (value?: string) => {
 
 onMounted(async () => {
   try {
-    const response = await workPlansAPI.getCurrentWorkPlan(props.clubId);
-    workPlan.value = response.data;
-  }
-  catch(error) {}
+    const response = await workPlansAPI.getCurrentWorkPlan(props.clubId)
+    workPlan.value = response.data
+  } catch (error) {}
 })
+
+function handleSave() {
+  emit("save", {
+    workPlanId: workPlan.value.id!,
+  })
+}
 </script>
 
 <template>
@@ -50,7 +65,7 @@ onMounted(async () => {
           class="bg-primary-500! border-none!
                hover:bg-primary-600!
                text-content-primary px-3 py-1 text-xs"
-          @click="$emit('save')"
+          @click="handleSave"
       />
     </div>
 

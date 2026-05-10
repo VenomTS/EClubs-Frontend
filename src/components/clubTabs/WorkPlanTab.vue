@@ -3,16 +3,39 @@ import {computed, onMounted, ref} from "vue"
 
 import CurrentWorkPlanPanel from "../workplans/CurrentWorkPlanPanel.vue";
 import AllWorkPlansPanel from "../workplans/AllWorkPlansPanel.vue";
-import {type GetAllWorkPlansByClubIdResponse, WorkPlansApi} from "../../../api";
+import {
+  ClubsApi,
+  type GetAllWorkPlansByClubIdResponse,
+  type GetStudentByClubIdResponse,
+  WorkPlansApi
+} from "../../../api";
+import TakeAttendanceModal from "../modals/Attendance/TakeAttendanceModal.vue";
 
 const workPlansAPI = new WorkPlansApi();
+const clubsAPI = new ClubsApi();
 const workPlans = ref<GetAllWorkPlansByClubIdResponse[]>([]);
+const students = ref<GetStudentByClubIdResponse[]>([]);
+
+const showAttendanceModal = ref(false);
+const currentWorkPlanID = ref("");
 
 const props = defineProps<{
   clubId: string
 }>();
 
 const isEmpty = computed(() => workPlans.value.length === 0)
+
+async function handleAttendance(workPlanId: string) {
+  try {
+    const response = await clubsAPI.getStudentsInClub(props.clubId);
+    students.value = response.data;
+    currentWorkPlanID.value = workPlanId;
+
+    showAttendanceModal.value = true;
+  }
+  catch(error) {}
+
+}
 
 onMounted(async () => {
   try {
@@ -52,7 +75,16 @@ onMounted(async () => {
 
       <!-- LEFT -->
       <div class="h-full">
-        <CurrentWorkPlanPanel :club-id="props.clubId"/>
+        <CurrentWorkPlanPanel :club-id="props.clubId"
+        @save="data => handleAttendance(data.workPlanId)"/>
+
+        <TakeAttendanceModal
+            v-if="showAttendanceModal"
+            :studentsData="students"
+            :clubId="props.clubId"
+            :currentWorkPlanId="currentWorkPlanID"
+            @close="showAttendanceModal = false"/>
+        />
       </div>
 
       <!-- RIGHT (scrollable) -->

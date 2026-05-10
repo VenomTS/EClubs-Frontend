@@ -24,7 +24,7 @@ import Accordion from "primevue/accordion"
 import AccordionPanel from "primevue/accordionpanel"
 import AccordionHeader from "primevue/accordionheader"
 import AccordionContent from "primevue/accordioncontent"
-import {DatePicker, InputChips, InputNumber, Textarea, ToastService} from "primevue";
+import {DatePicker, InputChips, InputNumber, SelectButton, Textarea, ToastService} from "primevue";
 import router from "./router.ts";
 import {pinia} from "./pinia.ts";
 import {useUserStore} from "./stores/userStore.ts";
@@ -67,6 +67,7 @@ async function bootstrap()
     app.component("Textarea", Textarea);
     app.component("InputChips", InputChips);
     app.component("DatePicker", DatePicker);
+    app.component("SelectButton", SelectButton);
 
 
     app.mount('#app');
