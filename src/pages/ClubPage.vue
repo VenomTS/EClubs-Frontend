@@ -6,7 +6,7 @@ import {
   AttendancesApi,
   type ClubMessageResponse,
   ClubsApi, type ClubWorkPlansResponse, type GetAllAttendancesResponse,
-  type GetClubByIdResponse, type GetCurrentWorkPlanResponse, type GetDomainsResponse, WorkPlansApi,
+  type GetClubByIdResponse, type GetDomainsResponse, WorkPlansApi,
 } from "../../api";
 import StreamTab from "../components/clubTabs/StreamTab.vue";
 import WorkPlanTab from "../components/clubTabs/WorkPlanTab.vue";
@@ -16,11 +16,11 @@ const clubsAPI = new ClubsApi();
 const workPlansAPI = new WorkPlansApi();
 const attendancesAPI = new AttendancesApi();
 const route = useRoute();
+const clubId = ref<string>("");
 
-const club = ref<GetClubByIdResponse>();
+const club = ref<GetClubByIdResponse>({professor: {}});
 const messages = ref<ClubMessageResponse[]>();
 const workPlans = ref<ClubWorkPlansResponse[]>();
-const currentWorkPlan = ref<GetCurrentWorkPlanResponse>();
 const domains = ref<GetDomainsResponse[]>();
 const attendances = ref<GetAllAttendancesResponse[]>();
 
@@ -29,6 +29,8 @@ watch(
     async (newId, oldId) => {
       if (newId == oldId || Array.isArray(newId)) return;
 
+      clubId.value = newId;
+
       const response = await clubsAPI.getClubById(newId);
 
       club.value = response.data;
@@ -36,16 +38,6 @@ watch(
       workPlans.value = club.value.workPlans;
 
       messages.value?.reverse();
-
-      try
-      {
-        const workPlansResponse = await workPlansAPI.getCurrentWorkPlan(newId);
-        currentWorkPlan.value = workPlansResponse.data;
-      }
-      catch
-      {
-        console.log("Nema Work Plan");
-      }
 
       try
       {
@@ -76,7 +68,7 @@ watch(
   <div class="min-h-screen bg-surface-background text-content-primary">
     <div class="border-b border-surface-border bg-surface-card px-6 py-4 space-y-2">
       <h1 class="text-2xl font-semibold text-primary-400">
-        {{ club?.name }}
+        {{ club.name }}
       </h1>
 
       <div class="flex flex-wrap items-center gap-3 text-xs text-content-secondary">
@@ -84,19 +76,19 @@ watch(
         <!-- DAY -->
         <span class="flex items-center gap-1 px-2 py-1 rounded-md bg-surface-hover border border-surface-border">
           <i class="pi pi-calendar text-xs"></i>
-          {{ club?.day }}
+          {{ club.day }}
         </span>
 
         <!-- TIME RANGE -->
         <span class="flex items-center gap-1 px-2 py-1 rounded-md bg-surface-hover border border-surface-border">
           <i class="pi pi-clock text-xs"></i>
-          {{ club?.startTime?.slice(0, 5) }} - {{ club?.endTime?.slice(0, 5) }}
+          {{ club.startTime?.slice(0, 5) }} - {{ club.endTime?.slice(0, 5) }}
         </span>
 
         <!-- PROFESSOR -->
         <span class="flex items-center gap-1 px-2 py-1 rounded-md bg-surface-hover border border-surface-border">
           <i class="pi pi-user text-xs"></i>
-          {{ club?.professor?.firstName }} {{ club?.professor?.lastName }}
+          {{ club.professor?.firstName }} {{ club.professor?.lastName }}
         </span>
 
         <!-- CODE -->
@@ -126,7 +118,7 @@ watch(
           </TabPanel>
 
           <TabPanel value="workplans">
-            <WorkPlanTab :allWorkPlans="workPlans" :currentWorkPlan="currentWorkPlan"/>
+            <WorkPlanTab :clubId="clubId"/>
           </TabPanel>
 
           <TabPanel value="students">

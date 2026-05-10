@@ -1,18 +1,26 @@
 <script setup lang="ts">
-import { computed } from "vue"
+import {computed, onMounted, ref} from "vue"
 
 import CurrentWorkPlanPanel from "../workplans/CurrentWorkPlanPanel.vue";
 import AllWorkPlansPanel from "../workplans/AllWorkPlansPanel.vue";
-import type {ClubWorkPlansResponse, GetCurrentWorkPlanResponse} from "../../../api";
+import {type GetAllWorkPlansByClubIdResponse, WorkPlansApi} from "../../../api";
+
+const workPlansAPI = new WorkPlansApi();
+const workPlans = ref<GetAllWorkPlansByClubIdResponse[]>([]);
 
 const props = defineProps<{
-  allWorkPlans: ClubWorkPlansResponse[] | undefined
-  currentWorkPlan: GetCurrentWorkPlanResponse | undefined
+  clubId: string
 }>();
 
-const isEmpty = computed(() =>
-    !props.currentWorkPlan || props.allWorkPlans?.length === 0
-)
+const isEmpty = computed(() => workPlans.value.length === 0)
+
+onMounted(async () => {
+  try {
+    const response = await workPlansAPI.getWorkPlansForClub(props.clubId);
+    workPlans.value = response.data;
+  }
+  catch(error) {}
+})
 </script>
 
 <template>
@@ -44,10 +52,7 @@ const isEmpty = computed(() =>
 
       <!-- LEFT -->
       <div class="h-full">
-        <CurrentWorkPlanPanel
-            v-if="props.currentWorkPlan"
-            :workPlan="props.currentWorkPlan"
-        />
+        <CurrentWorkPlanPanel :club-id="props.clubId"/>
       </div>
 
       <!-- RIGHT (scrollable) -->
@@ -55,9 +60,7 @@ const isEmpty = computed(() =>
 
         <div class="h-full overflow-y-auto pr-2 space-y-3">
 
-          <AllWorkPlansPanel
-              :workPlans="props.allWorkPlans"
-          />
+          <AllWorkPlansPanel :clubId="props.clubId"/>
 
         </div>
 

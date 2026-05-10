@@ -1,19 +1,23 @@
 <script setup lang="ts">
 import {computed, onMounted, ref} from "vue"
 
-import {type ClubWorkPlansResponse, type GetDomainsResponse, WorkPlansApi} from "../../../api"
+import {
+  type ClubWorkPlansResponse,
+  type GetAllWorkPlansByClubIdResponse,
+  type GetDomainsResponse,
+  WorkPlansApi
+} from "../../../api"
 import WorkPlanCard from "./WorkPlanCard.vue"
 import CreateWorkPlanModal from "../modals/CreateWorkPlanModal.vue";
 import type {CreateWorkPlanPayload} from "../../interfaces/CreateWorkPlanModalData.ts";
-import {useRoute} from "vue-router";
 
 const workPlansAPI = new WorkPlansApi();
 
-const route = useRoute();
 const domains = ref<GetDomainsResponse[]>([]);
+const workPlans = ref<GetAllWorkPlansByClubIdResponse[]>([]);
 
 const props = defineProps<{
-  workPlans: ClubWorkPlansResponse[] | undefined,
+  clubId: string
 }>()
 
 const showCreateWorkPlanModal = ref(false);
@@ -21,7 +25,7 @@ const showCreateWorkPlanModal = ref(false);
 const groupedPlans = computed(() => {
   const map = new Map<number, ClubWorkPlansResponse[]>()
 
-  for (const plan of props.workPlans!) {
+  for (const plan of workPlans.value) {
     if (!map.has(plan.domainNumber!)) {
       map.set(plan.domainNumber!, [])
     }
@@ -33,9 +37,6 @@ const groupedPlans = computed(() => {
 
 async function handleCreateWorkPlan(data: CreateWorkPlanPayload) {
 
-  const clubId = route.params.clubId;
-  if(Array.isArray(clubId)) return;
-
   const d = data.scheduledDate
   const formatted = d
       ? `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`
@@ -43,7 +44,7 @@ async function handleCreateWorkPlan(data: CreateWorkPlanPayload) {
 
   if(formatted == null) return;
 
-  const response = await workPlansAPI.createWorkPlanForClub(clubId, {
+  const response = await workPlansAPI.createWorkPlanForClub(props.clubId, {
     lessonUnit: data.lessonUnit,
     domain: data.domain,
     domainNumber: data.domainNumber,
@@ -54,7 +55,7 @@ async function handleCreateWorkPlan(data: CreateWorkPlanPayload) {
 
   const workPlanResponse = response.data;
 
-  props.workPlans?.push({
+  workPlans.value.push({
     id: workPlanResponse.id,
     domain: workPlanResponse.domain,
     domainNumber: workPlanResponse.domainNumber,
@@ -69,12 +70,16 @@ async function handleCreateWorkPlan(data: CreateWorkPlanPayload) {
 }
 
 onMounted(async () => {
-  const clubId = route.params.clubId;
-  if(Array.isArray(clubId)) return;
-
-  const response = await workPlansAPI.getDomainsByClubId(clubId);
-
-  domains.value = response.data;
+  try {
+    const response = await workPlansAPI.getDomainsByClubId(props.clubId);
+    domains.value = response.data;
+  }
+  catch(error) {}
+  try {
+    const response = await workPlansAPI.getWorkPlansForClub(props.clubId);
+    workPlans.value = response.data;
+  }
+  catch(error) {}
 })
 </script>
 

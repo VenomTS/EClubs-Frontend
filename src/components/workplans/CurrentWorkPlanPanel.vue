@@ -1,13 +1,27 @@
 <script setup lang="ts">
-import type { GetCurrentWorkPlanResponse } from "../../../api"
+import {type GetCurrentWorkPlanResponse, WorkPlansApi} from "../../../api"
 import Button from "primevue/button"
+import {onMounted, ref} from "vue";
 
-defineProps<{ workPlan: GetCurrentWorkPlanResponse }>()
+const props = defineProps<{
+  clubId: string
+}>();
+
+const workPlan = ref<GetCurrentWorkPlanResponse>({});
+const workPlansAPI = new WorkPlansApi();
 
 const getIndicators = (value?: string) => {
   if (!value) return []
   return value.split(";").map(i => i.trim()).filter(Boolean)
 }
+
+onMounted(async () => {
+  try {
+    const response = await workPlansAPI.getCurrentWorkPlan(props.clubId);
+    workPlan.value = response.data;
+  }
+  catch(error) {}
+})
 </script>
 
 <template>
