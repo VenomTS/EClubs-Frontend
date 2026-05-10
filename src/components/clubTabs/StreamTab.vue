@@ -57,6 +57,7 @@ onMounted(async () => {
   try {
     const response = await clubMessagesAPI.getMessagesForClub(props.clubId);
     messages.value = response.data;
+    messages.value.sort((a, b) => new Date(b.sentAt!).getTime() - new Date(a.sentAt!).getTime());
   }
   catch(error) {}
 })

@@ -1,10 +1,30 @@
 <script setup lang="ts">
 import StudentAttendance from "../students/StudentAttendance.vue"
-import type { GetAllAttendancesResponse } from "../../../api"
+import {AttendancesApi, type GetAllAttendancesResponse} from "../../../api"
+import {onMounted, ref} from "vue";
 
-defineProps<{
-  attendances: GetAllAttendancesResponse[] | undefined
+const attendanceAPI = new AttendancesApi();
+// const userStore = useUserStore();
+
+const attendances = ref<GetAllAttendancesResponse[]>();
+
+const props = defineProps<{
+  clubId: string;
+  isOnlyStudent: boolean;
 }>()
+
+onMounted(async () => {
+  try {
+    let response;
+    // if(!props.isOnlyStudent)
+      response = await attendanceAPI.getAttendancesForClub(props.clubId);
+    // else
+      // response = await attendanceAPI.getUserAttendancesForClub(props.clubId, userStore.userId);
+
+    attendances.value = response.data;
+  }
+  catch(error) {}
+})
 </script>
 
 <template>

@@ -122,9 +122,7 @@ watch(
           </TabPanel>
 
           <TabPanel value="students">
-            <AttendanceTab
-                :attendances="attendances"
-            />
+            <AttendanceTab :clubId="clubId" :isOnlyStudent="false"/>
           </TabPanel>
 
         </TabPanels>
