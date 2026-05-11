@@ -1,4 +1,73 @@
+<script setup>
+import {computed, ref, onMounted, onUnmounted} from "vue";
+import {useToast} from "primevue/usetoast";
+
+const club = ref({
+  name: "Club 1",
+  students: "4",
+});
+const isVisible = ref(false);
+const showModal = ref(false);
+const closeModal = () => {
+  showModal.value = false;
+}
+const attendanceOptions = [
+  {
+    label: "Take manually",
+  },
+  {
+    label: "QR code",
+  }
+];
+
+//Go to top button handler:
+const handleScroll = () => {
+  isVisible.value = window.scrollY > 20;
+}
+
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+};
+
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("scroll", handleScroll);
+})
+
+//Temporary student list:
+const students = ref([
+  {id: 1, name: "Student 1", absence: 3},
+  {id: 2, name: "Student 2", absence: 0},
+  {id: 3, name: "Student 3", absence: 0},
+  {id: 4, name: "Student 4", absence: 1},
+  {id: 5, name: "Student 5", absence: 1},
+  {id: 6, name: "Student 6", absence: 1},
+  {id: 7, name: "Student 7", absence: 1},
+  {id: 8, name: "Student 8", absence: 2},
+  {id: 9, name: "Student 9", absence: 0},
+])
+const getNumberOfStudents = () => {
+  return Object.keys(students).length - 1;
+}
+
+const sortStudents = computed(() => {
+  return [...students.value].sort((a, b) => a.name.localeCompare(b.name))
+  //localeCompare - compares two strings based on language settings (returns negative value = before, positive = after, 0 = strings are equal)
+})
+
+</script>
+
+
+
 <template>
+  <Toast />
+  <div class="container">
   <div class="w-full flex justify-center">
     <div class="w-5xl mt-4">
 
@@ -23,6 +92,31 @@
     </div>
   </div>
 
+  <div class="attendance-options">
+    <SplitButton class="attendance-button" label="Take attendance"
+                 @click="showModal" :model="attendanceOptions">Take attendance</SplitButton>
+  </div>
+
+  <Dialog
+      v-model:visible="showModal"
+      modal
+      header="Attendance"
+      :style="{ width: '25rem' }"
+  >
+    <div class="flex flex-col gap-4 py-3">
+      <div
+        v-for="student in sortStudents"
+        :key="student.id"
+        class="attendanceCard"
+        ></div>
+    </div>
+
+    <template #footer>
+      <div class="flex justify-end gap-2">
+        <Button label="Cancel" severity="secondary" @click="showModal = false" />
+      </div>
+    </template>
+  </Dialog>
 
       <!-- STUDENT LIST -->
       <div class="students-container">
@@ -40,38 +134,12 @@
         </span>
         </div>
       </div>
+  </div>
 
-
-
+  <Button class="back-to-top" v-show="isVisible" @click="scrollToTop">↑ Top</Button>
 
 </template>
 
-
-<script setup>
-import {computed, ref} from "vue";
-
-const club = ref({
-  name: "Club 1",
-  students: "4",
-})
-
-const students = ref([
-  {id: 1, name: "Student 1", absence: 3},
-  {id: 2, name: "Student 2", absence: 0},
-  {id: 3, name: "Student 3", absence: 0},
-  {id: 4, name: "Student 4", absence: 1},
-])
-const getNumberOfStudents = () => {
-  return Object.keys(students).length - 1;
-}
-
-const sortStudents = computed(() => {
-  return [...students.value].sort((a, b) => a.name.localeCompare(b.name))
-  //localeCompare - compares two strings based on language settings (returns negative value = before, positive = after, 0 = strings are equal)
-})
-
-
-</script>
 
 
 <!--AI slop:-->
@@ -115,6 +183,24 @@ const sortStudents = computed(() => {
 .absence {
   font-weight: bold;
   font-size: 20px;
+}
+
+.back-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 99;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.attendance-options {
+  margin: 20px 0;
+  z-index: 1;
 }
 
 </style>

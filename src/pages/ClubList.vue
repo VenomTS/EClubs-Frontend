@@ -1,132 +1,85 @@
-  <template>
-  <div class="page">
-    <header class="header">
-      <button class="hamburger" @click="hamburgerMenuClick">
-        ☰ <!--Emoji icon-->
-      </button>
-      <h1 class="title">E-CLUBS</h1>
-    </header>
-
-    <div class="classroom-grid">
-      <button
-          v-for="classroom in displayedClassrooms"
-          :key="classroom.id"
-          class="classroom-card"
-          @click="handleClick(classroom)"
-      >
-        <span v-if="classroom.isAdd" class="plus">+</span>
-        <span v-else>{{ classroom.name }}</span>
-      </button>
-    </div>
-  </div>
-
-  <div v-if="showModal" class="modal-overlay">
-    <div class="modal">
-      <div class="modal-header">
-        <h2>Create a new classroom</h2>
-        <button class="close" @click="closeModal">X</button>
-      </div>
-
-      <div class="modal-body">
-        <label>Classroom name</label>
-        <input v-model="newClassroom.name" type="text" placeholder="Name" />
-        <label>Class time slot</label>
-        <select v-model="newClassroom.day">
-          <option disabled value="">Day</option>
-          <option v-for="d in days" :key="d">{{d}}</option>
-        </select>
-
-        <input type="text" placeholder="Starting time (00:00)" v-model="startTimeInput" @input="formatTime('start')" />
-        <input type="text" placeholder="Ending time (00:00)" v-model="endTimeInput" @input="formatTime('end')" />
-      </div>
-
-      <div class="modal-footer">
-        <button class="save" @click="saveClassroom">SAVE</button>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup>
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
+import {useToast} from "primevue/usetoast";
+//All UI library imports are in MAIN.JS
 
 const router = useRouter();
-const userRole = ref("professor");
+const userRole = ref("professor"); //TODO: database connection
 const showModal = ref(false);
 const closeModal = () => {
   showModal.value = false;
 }
-const errorMessage = ref("");
-errorMessage.value = "Error: please ensure all inputs are valid!";
+const popUpMessage = (severity, summary, detail) => {
+  toast.add({ severity, summary, detail, life: 3000 });
+};
+const toast = useToast();
 
-const classrooms = ref([
-  { id: 1, name: "Test classroom 1" },
-  { id: 2, name: "Test classroom 2" }
+const clubs = ref([
+  { id: 1, name: "Test club 1",professor: "Tina Alibašić" },
+  { id: 2, name: "Test club 2", professor: "Aida Arnautović" }
 ]);
-const newClassroom = ref({
+const newClub = ref({
   name:"",
   day: "",
   start: "",
   end: ""
 });
-//Values for handling new classroom inputs:
+const roleList = ["professor", "student", "principal"];
+
+//Values for handling new club inputs:
 const startTimeInput = ref("");
 const endTimeInput = ref("");
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
-//Classroom spanning::
-const displayedClassrooms = computed(() => {
-  if (userRole.value === "professor")
-  {
-    return [
-      ...classrooms.value,
-      { id: "addClassroom", name: "ADD CLASSROOM", isAdd: true }
-    ];
-  }
-  return classrooms.value;
-});
-//Handling time in new classroom inputs:
+//Role check for the add club button:
+const displayAddButton = computed(() => userRole.value === roleList[0]);
+
+//Handling time in new club inputs:
 const formatTime = (type) => {
   let input = String(type === "start" ? startTimeInput.value : endTimeInput.value);
   input = input.replace(/\D/g, "").slice(0,4); //removes non-numbers
+  if (input.length > 4)
+    input=input.slice(0, 4)
   if (input.length >= 3)
-    {
-      input=input.slice(0,2)+":"+input.slice(2);
-    }
-    if (type === "start")
-    {
-      startTimeInput.value = input;
-      newClassroom.value.start = input;
-    }
-    else
-    {
-      endTimeInput.value = input;
-      newClassroom.value.end = input;
-    }
+  {
+    input=input.slice(0,2)+":"+input.slice(2);
   }
-
-  const isValidTime = (time) => {
+  if (type === "start")
+  {
+    startTimeInput.value = input;
+    newClub.value.start = input;
+  }
+  else
+  {
+    endTimeInput.value = input;
+    newClub.value.end = input;
+  }
+}
+const isValidTime = (time) => {
   const [hour, minute] = time.split(":").map(Number);
   return hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59; //Ensures the time entered is valid
-  }
-
-  const saveClassroom = async () => {
-  if (!newClassroom.value.name || !newClassroom.value.day || !isValidTime(newClassroom.value.start) || !isValidTime(newClassroom.value.end))
-  {
-    alert(errorMessage.value);
-    return;
-  }
-
-  classrooms.value.push({
-    id: Date.now(),
-    name: newClassroom.value.name,
-  })
-    closeModal();
 }
 
-const resetNewClassroomForm = () => {
-  newClassroom.value = {
+//Saving new club info:
+const saveClub = async () => {
+  if (!newClub.value.name || !newClub.value.day || !isValidTime(newClub.value.start) || !isValidTime(newClub.value.end))
+  {
+    popUpMessage("error", "Error", "Please ensure all inputs are valid!");
+    console.log("Not saved!");
+    return;
+  }
+  popUpMessage("success", "Saved", "Club created successfully");
+  console.log("saved!");
+  clubs.value.push({
+    id: Date.now(),
+    name: newClub.value.name,
+  });
+  closeModal();
+}
+
+const resetNewClubForm = () => {
+  newClub.value = {
     name: "",
     day: "",
     start: "",
@@ -136,30 +89,96 @@ const resetNewClassroomForm = () => {
   endTimeInput.value = "";
 }
 
-const hamburgerMenuClick = () => {
-  //TODO
+const clubIconClick = (club) => { //
+  router.push(`/clubpage`); // /${club.id}
 };
 
-const classroomIconClick = () => {
-  router.push(`/clubpage`); // /${classroom.id}
-};
-
-const onAddClassroom = () => {
+const addClub = () => {
   showModal.value=true;
-  resetNewClassroomForm();
+  resetNewClubForm();
 };
 
-const handleClick = (classroom) => {
-  if (classroom.isAdd)
-  {
-    onAddClassroom();
-  }
-  else
-  {
-    classroomIconClick(classroom);
-  }
-};
 </script>
+
+
+
+<template>
+  <Toast position="top-center" />
+  <div class="min-h-screen bg-gray-50 p-8">
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div
+          v-for="club in clubs"
+          :key="club.id"
+          class="bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden">
+
+        <div class="h-40 bg-emerald-200 flex items-center justify-center">
+          <span class="text-emerald-700 font-semibold text-4xl">
+            {{ club.name }}
+          </span>
+        </div>
+
+        <div class="p-5">
+
+          <p class="text-gray-600 text-sm mb-4">
+            {{ club.professor }}
+          </p>
+
+          <button
+              @click="clubIconClick(club)"
+              class="w-full bg-emerald-600 text-white py-2 rounded-xl font-bold hover:bg-emerald-700 transition">
+            Open
+          </button>
+        </div>
+      </div>
+
+      <Button
+
+          v-if="displayAddButton"
+          @click="addClub"
+          class="addClub-card"
+      >
+        <span class="plus">+</span>
+      </Button>
+
+    </div>
+  </div>
+
+  <Dialog
+      v-model:visible="showModal"
+      modal
+      header="Create new classroom"
+      :style="{ width: '25rem' }"
+  >
+    <div class="flex flex-col gap-4 py-3">
+      <div>
+        <label class="block text-sm font-medium mb-1">Club name:</label>
+        <InputText v-model="newClub.name" placeholder="Name" class="w-full" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Club time slot</label>
+        <Dropdown v-model="newClub.day" :options="days" placeholder="Day" class="w-full" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Starting time:</label>
+        <InputText v-model="startTimeInput" placeholder="00:00" class="w-full" maxlength="5" @input="formatTime('start')" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Ending time:</label>
+        <InputText v-model="endTimeInput" placeholder="00:00" class="w-full" maxlength="5" @input="formatTime('end')" />
+      </div>
+    </div>
+
+    <template #footer>
+      <div class="flex justify-end gap-2">
+        <Button label="Cancel" severity="secondary" @click="showModal = false" />
+        <Button label="Save" severity="primary" @click="saveClub" />
+      </div>
+    </template>
+  </Dialog>
+
+</template>
+
 
 
 <!-- AI slop: -->
@@ -170,46 +189,13 @@ body {
 }
 
 .page {
-  background: #e6e6e6;
+  background: darkgray;
   min-height: 100vh;
-}
-
-/* HEADER */
-
-.header {
-  background: blue;
-  height: 70px;
-  display: flex;
-  align-items: center;
-  position: relative;
-}
-
-.title {
-  width: 100%;
-  text-align: center;
-  font-size: 48px;
-  font-weight: bold;
-  color: white;
-  letter-spacing: 3px;
-}
-
-.hamburger {
-  position: absolute;
-  left: 20px;
-  font-size: 28px;
-  background: none;
-  color: white;
-  border: solid white;
-  cursor: pointer;
-}
-
-.hamburger:hover {
-  transform: scale(1.1);
 }
 
 /* GRID */
 
-.classroom-grid {
+.clubRoom-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 50px;
@@ -219,113 +205,26 @@ body {
 
 /* CLASSROOM CARD */
 
-.classroom-card {
+.addClub-card {
   height: 260px;
-  background: #8f8f8f;
-  border-radius: 35px;
-  border: none;
-  font-size: 16px;
+  border-radius: 45px !important;
+  border: solid 5px rgba(0, 1, 0, 0.5) !important;
+  font-size: 40px !important;
   cursor: pointer;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  transition: transform 0.15s, box-shadow 0.15s;
 }
 
-.classroom-card:hover {
+.addClub-card:hover {
   transform: scale(1.03);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
   color: white;
+  border: none !important;
 }
 
 .plus {
-  font-size: 48px;
+  font-size: 60px;
   font-weight: bold;
-}
-
-/* DARK BACKGROUND OVERLAY */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  background: rgba(0, 0, 0, 0.45);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  z-index: 1000;
-}
-
-/* ACTUAL POPUP WINDOW */
-.modal {
-  width: 420px;
-  max-width: 90%;
-
-  background: #dcdcdc;
-  border-radius: 20px;
-
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-
-  padding: 20px;
-
-  animation: popup 0.2s ease-out;
-}
-
-/* HEADER */
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  font-size: 20px;
-  font-weight: bold;
-}
-
-/* CLOSE BUTTON */
-.close {
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-/* BODY */
-.modal-body {
-  margin-top: 15px;
-
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-/* INPUTS */
-.modal-body input,
-.modal-body select {
-  padding: 10px;
-  border-radius: 10px;
-  border: 2px solid #333;
-}
-
-/* FOOTER */
-.modal-footer {
-  margin-top: 15px;
-  display: flex;
-  justify-content: flex-end;
-}
-
-/* SAVE BUTTON */
-.save {
-  padding: 10px 20px;
-  border-radius: 10px;
-  border: none;
-  background: #bfbfbf;
-  cursor: pointer;
 }
 
 /* POP ANIMATION */
