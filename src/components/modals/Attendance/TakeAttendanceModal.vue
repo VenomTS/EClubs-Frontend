@@ -60,11 +60,11 @@ onMounted(() => {
 async function save() {
   loading.value = true
 
-  students.value.forEach(student => {
+  for (const student of students.value) {
     console.log("Checking student: " + student);
     if(student.present)
-      attendanceApi.markStudentPresent(props.clubId, { workPlanId: props.currentWorkPlanId, studentId: student.id})
-  })
+      await attendanceApi.markStudentPresent(props.clubId, { workPlanId: props.currentWorkPlanId, studentId: student.id})
+  }
 
   await attendanceApi.concludeAttendanceTaking(props.clubId);
 
