@@ -19,9 +19,9 @@ import type { Configuration } from './configuration';
 import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
 import globalAxios from 'axios';
 
-globalAxios.defaults.withCredentials = true;
+export const BASE_PATH = "https://192.168.1.101:8080".replace(/\/+$/, "");
 
-export const BASE_PATH = "https://109.237.44.64:8080".replace(/\/+$/, "");
+globalAxios.defaults.withCredentials = true;
 
 export const COLLECTION_FORMATS = {
     csv: ",",

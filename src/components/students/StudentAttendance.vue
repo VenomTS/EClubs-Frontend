@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref, computed } from "vue"
 import Button from "primevue/button"
-import type { GetAllAttendancesResponse } from "../../../api"
+import type { GetAttendanceResponse } from "../../../api"
 
 const props = defineProps<{
-  data: GetAllAttendancesResponse
+  data: GetAttendanceResponse
 }>()
 
 const emit = defineEmits(["rate"])

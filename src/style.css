@@ -1,29 +1,3 @@
 @import "tailwindcss";
 @config "../tailwind.config.ts";
 
-:root {
-    /* ================= PRIMARY ================= */
-    --primary-color: #22c55e;
-    --primary-color-text: #020617;
-
-    /* ================= SURFACES ================= */
-    --surface-ground: #020617;
-    --surface-card: #0f172a;
-    --surface-overlay: #111827;
-    --surface-border: #1f2937;
-    --surface-hover: #1e293b;
-
-    /* ================= TEXT ================= */
-    --text-color: #f8fafc;
-    --text-color-secondary: #cbd5e1;
-    --text-color-muted: #64748b;
-
-    /* Optional accent mapping */
-    --highlight-bg: rgba(34, 197, 94, 0.12);
-    --highlight-text-color: #6ee7b7;
-}
-
-.p-inputtext,
-.p-dropdown {
-    @apply rounded-lg;
-}

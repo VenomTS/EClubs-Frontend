@@ -1,5 +1,5 @@
 export default {
-    darkMode: 'class', // always dark
+    darkMode: 'class',
 
     content: [
         "./index.html",
@@ -11,59 +11,63 @@ export default {
             colors: {
 
                 /* ========================
-                   PRIMARY (GREEN BRAND)
+                   PRIMARY (modern green / tech)
                 ======================== */
                 primary: {
-                    50: '#ecfdf5',
-                    100: '#d1fae5',
-                    200: '#a7f3d0',
-                    300: '#6ee7b7',
-                    400: '#34d399',
-                    500: '#22c55e', // main brand
-                    600: '#16a34a',
-                    700: '#15803d',
-                    800: '#166534',
-                    900: '#14532d'
+                    50: '#eafff3',
+                    100: '#c8ffe1',
+                    200: '#90f5c2',
+                    300: '#4ee6a0',
+                    400: '#22d38a',
+                    500: '#16c47f', // more modern / distinct
+                    600: '#10a96c',
+                    700: '#0e8758',
+                    800: '#0c6a46',
+                    900: '#064a31'
                 },
 
                 /* ========================
-                   SECONDARY
+                   SECONDARY (cool tech blue)
                 ======================== */
                 secondary: {
-                    400: '#38bdf8',
-                    500: '#0ea5e9',
-                    600: '#0284c7'
+                    400: '#60a5fa',
+                    500: '#3b82f6',
+                    600: '#2563eb'
                 },
 
+                /* ========================
+                   ACCENT (warm contrast highlight)
+                ======================== */
                 accent: {
+                    400: '#fbbf24',
                     500: '#f59e0b',
                     600: '#d97706'
                 },
 
                 /* ========================
-                   DARK SURFACES
+                   SURFACES (more depth layering)
                 ======================== */
                 surface: {
-                    background: '#020617', // page bg
-                    sidebar: '#020617',
-                    card: '#0f172a',
-                    elevated: '#111827',
-                    hover: '#1e293b',
-                    border: '#1f2937'
+                    background: '#050816', // deeper, richer base
+                    sidebar: '#070b1a',
+                    card: '#0b1226',
+                    elevated: '#111a33',
+                    hover: '#172554',
+                    border: '#1e2a44'
                 },
 
                 /* ========================
-                   TEXT COLORS
+                   TEXT (improved contrast hierarchy)
                 ======================== */
                 content: {
                     primary: '#f8fafc',
                     secondary: '#cbd5e1',
-                    muted: '#64748b',
-                    disabled: '#475569'
+                    muted: '#94a3b8',
+                    disabled: '#64748b'
                 },
 
                 /* ========================
-                   STATUS COLORS
+                   STATUS COLORS (slightly refined)
                 ======================== */
                 success: {
                     500: '#22c55e',
@@ -71,8 +75,8 @@ export default {
                 },
 
                 warning: {
-                    500: '#f59e0b',
-                    600: '#d97706'
+                    500: '#fbbf24',
+                    600: '#f59e0b'
                 },
 
                 danger: {

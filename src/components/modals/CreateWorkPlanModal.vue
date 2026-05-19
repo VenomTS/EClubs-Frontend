@@ -1,327 +1,239 @@
 <script setup lang="ts">
-import { computed, reactive, ref, watch } from "vue"
+import { computed, reactive, ref } from "vue"
 import BaseModal from "./BaseModal.vue"
 
 import type { GetDomainsResponse } from "../../../api"
-import type { CreateWorkPlanPayload } from "../../interfaces/CreateWorkPlanModalData"
-
-/* ---------------------------------
-   Props / Emits
----------------------------------- */
+import { useWorkPlansStore } from "../../stores/workplans.store"
 
 const props = defineProps<{
+  clubId: string
   domains: GetDomainsResponse[]
 }>()
 
 const emit = defineEmits<{
   (e: "close"): void
-  (e: "create", payload: CreateWorkPlanPayload): void
 }>()
 
-/* ---------------------------------
-   Date Bounds
----------------------------------- */
-
-const today = new Date()
-today.setHours(0, 0, 0, 0)
-
-const minDate = new Date(today)
-const maxDate = new Date(today)
-maxDate.setFullYear(maxDate.getFullYear() + 1)
+const workPlansStore = useWorkPlansStore()
 
 /* ---------------------------------
-   UI State
+   UI STATE
 ---------------------------------- */
-
-const loading = ref(false)
+const submitting = ref(false)
 const submitted = ref(false)
 const createNewDomain = ref(false)
 
 /* ---------------------------------
-   Form State
+   FORM
 ---------------------------------- */
-
 const form = reactive({
-  selectedDomain: null as GetDomainsResponse | null,
-  newDomainName: "",
-  newDomainNumber: null as number | null,
-  lessonUnit: "",
+  selectedDomain: "",
+  newDomain: "",
+  unit: "",
   learningOutcome: "",
-  indicators: [] as string[],
-  scheduledDate: new Date(today) as Date | null
+  indicators: [] as string[]
 })
 
 /* ---------------------------------
-   Domain Helpers
+   RESOLVED VALUES
 ---------------------------------- */
-
-const domainOptions = computed(() =>
-    props.domains.map((d) => ({
-      label: `Domain ${d.domainNumber} - ${d.domain}`,
-      value: d
-    }))
+const resolvedDomain = computed(() =>
+    createNewDomain.value
+        ? form.newDomain.trim()
+        : form.selectedDomain
 )
-
-const nextDomainNumber = computed(
-    () => Math.max(0, ...props.domains.map((d) => d.domainNumber ?? 0)) + 1
-)
-
-/* ---------------------------------
-   Toggle Behavior
----------------------------------- */
-
-watch(
-    createNewDomain,
-    (isNew) => {
-      if (isNew) {
-        form.selectedDomain = null
-        if (form.newDomainNumber === null) form.newDomainNumber = nextDomainNumber.value
-        return
-      }
-
-      form.newDomainName = ""
-      form.newDomainNumber = null
-    },
-    { immediate: true }
-)
-
-/* ---------------------------------
-   Validation
----------------------------------- */
 
 const normalizedIndicators = computed(() =>
-    form.indicators.map((i) => i.trim()).filter(Boolean)
+    form.indicators.map(i => i.trim()).filter(Boolean)
 )
 
-const fieldErrors = computed(() => {
-  const errors: Record<string, string> = {}
+/* ---------------------------------
+   VALIDATION
+---------------------------------- */
+const errors = computed(() => {
+  const e: Record<string, string> = {}
 
-  if (createNewDomain.value) {
-    if (!form.newDomainName.trim()) {
-      errors.newDomainName = "Domain name is required."
-    }
+  if (!resolvedDomain.value)
+    e.domain = "Domain is required."
 
-    if (form.newDomainNumber === null || form.newDomainNumber < 1) {
-      errors.newDomainNumber = "Domain number must be at least 1."
-    }
-  } else if (!form.selectedDomain) {
-    errors.selectedDomain = "Please select a domain."
-  }
+  if (!form.unit.trim())
+    e.unit = "Unit is required."
 
-  if (!form.lessonUnit.trim()) {
-    errors.lessonUnit = "Lesson unit is required."
-  }
+  if (!form.learningOutcome.trim())
+    e.learningOutcome = "Learning outcome is required."
 
-  if (!form.learningOutcome.trim()) {
-    errors.learningOutcome = "Learning outcome is required."
-  }
+  if (normalizedIndicators.value.length === 0)
+    e.indicators = "Add at least one indicator."
 
-  if (!form.scheduledDate) {
-    errors.scheduledDate = "Scheduled date is required."
-  }
-
-  if (normalizedIndicators.value.length === 0) {
-    errors.indicators = "Add at least one indicator."
-  }
-
-  return errors
+  return e
 })
 
-const isValid = computed(() => Object.keys(fieldErrors.value).length === 0)
+const isValid = computed(() =>
+    Object.keys(errors.value).length === 0
+)
 
 /* ---------------------------------
-   Submit
+   SUBMIT
 ---------------------------------- */
-
-function resolveDomain() {
-  if (createNewDomain.value) {
-    if (!form.newDomainName.trim() || form.newDomainNumber === null || form.newDomainNumber < 1) {
-      return null
-    }
-
-    return {
-      domainNumber: form.newDomainNumber,
-      domain: form.newDomainName.trim()
-    }
-  }
-
-  return form.selectedDomain
-}
-
-async function submit() {
+const submit = async () => {
   submitted.value = true
-  if (loading.value || !isValid.value) return
+  if (!isValid.value || submitting.value) return
 
-  const domain = resolveDomain()
-  if (!domain || !form.scheduledDate) return
+  submitting.value = true
 
-  loading.value = true
-  try {
-    const payload: CreateWorkPlanPayload = {
-      domainNumber: domain.domainNumber!,
-      domain: domain.domain!,
-      lessonUnit: form.lessonUnit.trim(),
-      learningOutcome: form.learningOutcome.trim(),
-      indicators: normalizedIndicators.value.join(";"),
-      scheduledDate: form.scheduledDate
-    }
+  const result = await workPlansStore.createWorkPlan(props.clubId, {
+    domain: resolvedDomain.value,
+    unit: form.unit.trim(),
+    learningOutcome: form.learningOutcome.trim(),
+    indicator: normalizedIndicators.value.join(";")
+  })
 
-    emit("create", payload)
+  submitting.value = false
+
+  if (result.success) {
     emit("close")
-  } finally {
-    loading.value = false
   }
 }
 </script>
 
 <template>
   <BaseModal @close="emit('close')">
+
     <div class="space-y-6">
-      <!-- Header -->
+
+      <!-- HEADER -->
       <header>
-        <h2 class="text-xl font-semibold text-content-primary">Create Work Plan</h2>
-        <p class="mt-1 text-sm text-content-secondary">
-          Define curriculum domain, learning outcomes, indicators, and schedule.
+        <h2 class="text-xl font-semibold text-content-primary">
+          Create Work Plan
+        </h2>
+
+        <p class="text-sm text-content-secondary">
+          Choose an existing domain or create a new one.
         </p>
       </header>
 
-      <!-- Domain -->
+      <!-- DOMAIN -->
       <section class="space-y-2">
-        <div class="flex items-center justify-between gap-3">
-          <label class="text-sm font-medium text-content-primary">Domain</label>
+
+        <div class="flex justify-between items-center">
+          <label class="text-sm font-medium text-content-primary">
+            Domain
+          </label>
 
           <Button
               size="small"
               text
               icon="pi pi-plus"
               :label="createNewDomain ? 'Use existing' : 'New domain'"
-              class="!text-primary-500"
+              class="text-primary-500"
               @click="createNewDomain = !createNewDomain"
           />
         </div>
 
+        <!-- EXISTING -->
         <Select
             v-if="!createNewDomain"
             v-model="form.selectedDomain"
-            :options="domainOptions"
-            optionLabel="label"
-            optionValue="value"
+            :options="domains"
+            optionLabel="domain"
+            optionValue="domain"
             placeholder="Select domain"
             class="w-full"
-            :invalid="submitted && !!fieldErrors.selectedDomain"
+            :invalid="submitted && !!errors.domain"
         />
 
-        <div v-else class="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_7rem]">
-          <InputText
-              v-model="form.newDomainName"
-              placeholder="Domain name"
-              class="w-full"
-              :invalid="submitted && !!fieldErrors.newDomainName"
-          />
-
-          <InputNumber
-              v-model="form.newDomainNumber"
-              :min="1"
-              :useGrouping="false"
-              showButtons
-              buttonLayout="vertical"
-              incrementButtonIcon="pi pi-plus"
-              decrementButtonIcon="pi pi-minus"
-              inputClass="text-center"
-              class="w-full"
-              :invalid="submitted && !!fieldErrors.newDomainNumber"
-          />
-        </div>
-
-        <small
-            v-if="submitted && (fieldErrors.selectedDomain || fieldErrors.newDomainName || fieldErrors.newDomainNumber)"
-            class="text-red-500"
-        >
-          {{
-            fieldErrors.selectedDomain ||
-            fieldErrors.newDomainName ||
-            fieldErrors.newDomainNumber
-          }}
-        </small>
-      </section>
-
-      <!-- Lesson Unit -->
-      <section class="space-y-2">
-        <label class="text-sm font-medium text-content-primary">Lesson Unit</label>
+        <!-- NEW -->
         <InputText
-            v-model="form.lessonUnit"
-            placeholder="Introduction to Fractions"
+            v-else
+            v-model="form.newDomain"
+            placeholder="Enter new domain"
             class="w-full"
-            :invalid="submitted && !!fieldErrors.lessonUnit"
+            :invalid="submitted && !!errors.domain"
         />
-        <small v-if="submitted && fieldErrors.lessonUnit" class="text-red-500">
-          {{ fieldErrors.lessonUnit }}
+
+        <small v-if="submitted && errors.domain" class="text-red-500">
+          {{ errors.domain }}
+        </small>
+
+      </section>
+
+      <!-- UNIT -->
+      <section class="space-y-2">
+        <label class="text-sm font-medium text-content-primary">
+          Unit
+        </label>
+
+        <InputText
+            v-model="form.unit"
+            placeholder="Fractions"
+            class="w-full"
+            :invalid="submitted && !!errors.unit"
+        />
+
+        <small v-if="submitted && errors.unit" class="text-red-500">
+          {{ errors.unit }}
         </small>
       </section>
 
-      <!-- Learning Outcome -->
+      <!-- LEARNING OUTCOME -->
       <section class="space-y-2">
-        <label class="text-sm font-medium text-content-primary">Learning Outcome</label>
+        <label class="text-sm font-medium text-content-primary">
+          Learning Outcome
+        </label>
+
         <InputText
             v-model="form.learningOutcome"
-            placeholder="Students understand fraction representation"
+            placeholder="Students understand fractions"
             class="w-full"
-            :invalid="submitted && !!fieldErrors.learningOutcome"
+            :invalid="submitted && !!errors.learningOutcome"
         />
-        <small v-if="submitted && fieldErrors.learningOutcome" class="text-red-500">
-          {{ fieldErrors.learningOutcome }}
+
+        <small v-if="submitted && errors.learningOutcome" class="text-red-500">
+          {{ errors.learningOutcome }}
         </small>
       </section>
 
-      <!-- Scheduled Date -->
+      <!-- INDICATORS -->
       <section class="space-y-2">
-        <label class="text-sm font-medium text-content-primary">Scheduled Date</label>
-        <DatePicker
-            v-model="form.scheduledDate"
-            :minDate="minDate"
-            :maxDate="maxDate"
-            showIcon
-            dateFormat="dd.mm.yy"
-            class="w-full"
-            :invalid="submitted && !!fieldErrors.scheduledDate"
-        />
-        <small v-if="submitted && fieldErrors.scheduledDate" class="text-red-500">
-          {{ fieldErrors.scheduledDate }}
-        </small>
-      </section>
+        <label class="text-sm font-medium text-content-primary">
+          Indicators
+        </label>
 
-      <!-- Indicators -->
-      <section class="space-y-2">
-        <label class="text-sm font-medium text-content-primary">Indicators</label>
         <InputChips
             v-model="form.indicators"
             placeholder="Press Enter to add indicator"
             class="w-full"
-            :invalid="submitted && !!fieldErrors.indicators"
+            :invalid="submitted && !!errors.indicators"
         />
-        <small v-if="submitted && fieldErrors.indicators" class="text-red-500">
-          {{ fieldErrors.indicators }}
+
+        <small v-if="submitted && errors.indicators" class="text-red-500">
+          {{ errors.indicators }}
         </small>
       </section>
 
-      <!-- Footer -->
+      <!-- FOOTER -->
       <footer class="flex justify-end gap-3 border-t border-surface-border pt-5">
+
         <Button
             label="Cancel"
-            severity="secondary"
             outlined
-            :disabled="loading"
+            severity="secondary"
+            :disabled="submitting"
             @click="emit('close')"
         />
+
         <Button
             label="Create Work Plan"
             icon="pi pi-check"
-            :loading="loading"
-            :disabled="loading || !isValid"
-            class="!border-primary-600 !bg-primary-500 hover:!bg-primary-600"
+            :loading="submitting"
+            :disabled="!isValid"
+            class="bg-primary-500 border-primary-600 hover:bg-primary-600"
             @click="submit"
         />
+
       </footer>
+
     </div>
+
   </BaseModal>
 </template>

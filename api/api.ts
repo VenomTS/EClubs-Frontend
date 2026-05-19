@@ -27,32 +27,6 @@ export interface AttendanceHistoryResponse {
     'date'?: string;
     'status'?: number;
 }
-export interface AttendanceUserResponse {
-    'firstName'?: string;
-    'lastName'?: string;
-}
-export interface ClubMessageResponse {
-    'id'?: string;
-    'sender': MessageSenderResponse;
-    'content'?: string;
-    'sentAt'?: string;
-}
-export interface ClubProfessorResponse {
-    'firstName'?: string;
-    'lastName'?: string;
-}
-export interface ClubWorkPlansResponse {
-    'id'?: string;
-    'domainNumber'?: number;
-    'domain'?: string;
-    'lessonNumber'?: number;
-    'lessonUnit'?: string;
-    'learningOutcome'?: string;
-    'indicator'?: string;
-    'status'?: number;
-    'scheduledDate'?: string;
-    'realizationDate'?: string | null;
-}
 export interface CreateClubRequest {
     'name'?: string;
     'professorId'?: string;
@@ -60,87 +34,29 @@ export interface CreateClubRequest {
     'startTime'?: string;
     'endTime'?: string;
 }
-export interface CreateClubResponse {
-    'id'?: string;
-    'name'?: string;
-    'professor': ClubProfessorResponse;
-}
 export interface CreateMessageRequest {
     'senderId'?: string;
     'content'?: string;
 }
-export interface CreateMessageResponse {
-    'id'?: string;
-    'sender': MessageSenderResponse;
-    'content'?: string;
-    'sentAt'?: string;
-}
 export interface CreateWorkPlanRequest {
-    'domainNumber'?: number;
     'domain'?: string;
-    'lessonUnit'?: string;
+    'unit'?: string;
     'learningOutcome'?: string;
     'indicator'?: string;
     'scheduledDate'?: string;
 }
-export interface CreateWorkPlanResponse {
-    'id'?: string;
-    'domainNumber'?: number;
-    'domain'?: string;
-    'lessonNumber'?: number;
-    'lessonUnit'?: string;
-    'learningOutcome'?: string;
-    'indicator'?: string;
-    'status'?: number;
-    'scheduledDate'?: string;
-}
-export interface GetAllAttendancesResponse {
-    'student': AttendanceUserResponse;
+export interface GetAttendanceResponse {
+    'student': GetUserResponse;
     'attendanceHistory': Array<AttendanceHistoryResponse>;
 }
-export interface GetAllClubsResponse {
+export interface GetClubResponse {
     'id'?: string;
+    'professor'?: GetUserResponse;
     'name'?: string;
-    'professor': ClubProfessorResponse;
-}
-export interface GetAllMessagesByClubIdResponse {
-    'id'?: string;
-    'sender': MessageSenderResponse;
-    'content'?: string;
-    'sentAt'?: string;
-}
-export interface GetAllWorkPlansByClubIdResponse {
-    'id'?: string;
-    'domainNumber'?: number;
-    'domain'?: string;
-    'lessonNumber'?: number;
-    'lessonUnit'?: string;
-    'learningOutcome'?: string;
-    'indicator'?: string;
-    'status'?: number;
-    'scheduledDate'?: string;
-    'realizationDate'?: string | null;
-}
-export interface GetClubByIdResponse {
-    'id'?: string;
-    'name'?: string;
+    'code'?: string;
     'day'?: number;
     'startTime'?: string;
     'endTime'?: string;
-    'isActive'?: boolean;
-    'createdAt'?: string;
-    'professor': ClubProfessorResponse;
-    'workPlans'?: Array<ClubWorkPlansResponse>;
-    'messages'?: Array<ClubMessageResponse>;
-}
-export interface GetCurrentWorkPlanResponse {
-    'id'?: string;
-    'domainNumber'?: number;
-    'domain'?: string;
-    'lessonNumber'?: number;
-    'lessonUnit'?: string;
-    'learningOutcome'?: string;
-    'indicator'?: string;
 }
 export interface GetDomainsResponse {
     'domainNumber'?: number;
@@ -152,28 +68,28 @@ export interface GetMeResponse {
     'lastName'?: string;
     'roles'?: Array<string>;
 }
-export interface GetMessageByIdResponse {
+export interface GetMessageResponse {
     'id'?: string;
-    'sender': MessageSenderResponse;
+    'sender': GetUserResponse;
     'content'?: string;
     'sentAt'?: string;
 }
-export interface GetStudentByClubIdResponse {
+export interface GetUserResponse {
+    'id'?: string;
     'firstName'?: string;
     'lastName'?: string;
 }
-export interface GetUserAttendanceResponse {
-    'student': AttendanceUserResponse;
-    'date'?: string;
-    'status'?: number;
+export interface GetWorkPlanResponse {
+    'id'?: string;
+    'domain'?: string;
+    'unit'?: string;
+    'learningOutcome'?: string;
+    'indicator'?: string;
+    'realizationDate'?: string | null;
 }
 export interface LoginUserRequest {
     'mail'?: string;
     'password'?: string;
-}
-export interface MessageSenderResponse {
-    'firstName'?: string;
-    'lastName'?: string;
 }
 export interface ProblemDetails {
     'type'?: string | null;
@@ -183,8 +99,9 @@ export interface ProblemDetails {
     'instance'?: string | null;
 }
 export interface RegisterAttendanceRequest {
-    'workPlanId'?: string;
     'studentId'?: string;
+    'date'?: string;
+    'status'?: number;
 }
 export interface RegisterUserRequest {
     'firstName'?: string;
@@ -201,38 +118,6 @@ export interface UpdateMessageRequest {
  */
 export const AttendancesApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
-        /**
-         * 
-         * @param {string} clubId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        concludeAttendanceTaking: async (clubId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'clubId' is not null or undefined
-            assertParamExists('concludeAttendanceTaking', 'clubId', clubId)
-            const localVarPath = `/api/clubs/{clubId}/Attendances/conclude`
-                .replace(`{${"clubId"}}`, encodeURIComponent(String(clubId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
         /**
          * 
          * @param {string} clubId 
@@ -356,19 +241,7 @@ export const AttendancesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async concludeAttendanceTaking(clubId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.concludeAttendanceTaking(clubId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AttendancesApi.concludeAttendanceTaking']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {string} clubId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getAttendancesForClub(clubId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetAllAttendancesResponse>>> {
+        async getAttendancesForClub(clubId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetAttendanceResponse>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAttendancesForClub(clubId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AttendancesApi.getAttendancesForClub']?.[localVarOperationServerIndex]?.url;
@@ -381,7 +254,7 @@ export const AttendancesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getUserAttendancesForClub(clubId: string, userId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetUserAttendanceResponse>>> {
+        async getUserAttendancesForClub(clubId: string, userId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAttendanceResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getUserAttendancesForClub(clubId, userId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AttendancesApi.getUserAttendancesForClub']?.[localVarOperationServerIndex]?.url;
@@ -415,16 +288,7 @@ export const AttendancesApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        concludeAttendanceTaking(clubId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.concludeAttendanceTaking(clubId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} clubId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAttendancesForClub(clubId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<GetAllAttendancesResponse>> {
+        getAttendancesForClub(clubId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<GetAttendanceResponse>> {
             return localVarFp.getAttendancesForClub(clubId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -434,7 +298,7 @@ export const AttendancesApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUserAttendancesForClub(clubId: string, userId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<GetUserAttendanceResponse>> {
+        getUserAttendancesForClub(clubId: string, userId: string, options?: RawAxiosRequestConfig): AxiosPromise<GetAttendanceResponse> {
             return localVarFp.getUserAttendancesForClub(clubId, userId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -454,16 +318,6 @@ export const AttendancesApiFactory = function (configuration?: Configuration, ba
  * AttendancesApi - object-oriented interface
  */
 export class AttendancesApi extends BaseAPI {
-    /**
-     * 
-     * @param {string} clubId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    public concludeAttendanceTaking(clubId: string, options?: RawAxiosRequestConfig) {
-        return AttendancesApiFp(this.configuration).concludeAttendanceTaking(clubId, options).then((request) => request(this.axios, this.basePath));
-    }
-
     /**
      * 
      * @param {string} clubId 
@@ -727,15 +581,48 @@ export const ClubMessagesApiAxiosParamCreator = function (configuration?: Config
         /**
          * 
          * @param {string} clubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMessagesByClubId: async (clubId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'clubId' is not null or undefined
+            assertParamExists('getMessagesByClubId', 'clubId', clubId)
+            const localVarPath = `/api/clubs/{clubId}/ClubMessages`
+                .replace(`{${"clubId"}}`, encodeURIComponent(String(clubId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Accept'] = 'text/plain,application/json,text/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} clubId 
          * @param {CreateMessageRequest} createMessageRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createMessageForClub: async (clubId: string, createMessageRequest: CreateMessageRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        sendMessage: async (clubId: string, createMessageRequest: CreateMessageRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'clubId' is not null or undefined
-            assertParamExists('createMessageForClub', 'clubId', clubId)
+            assertParamExists('sendMessage', 'clubId', clubId)
             // verify required parameter 'createMessageRequest' is not null or undefined
-            assertParamExists('createMessageForClub', 'createMessageRequest', createMessageRequest)
+            assertParamExists('sendMessage', 'createMessageRequest', createMessageRequest)
             const localVarPath = `/api/clubs/{clubId}/ClubMessages`
                 .replace(`{${"clubId"}}`, encodeURIComponent(String(clubId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -762,39 +649,6 @@ export const ClubMessagesApiAxiosParamCreator = function (configuration?: Config
                 options: localVarRequestOptions,
             };
         },
-        /**
-         * 
-         * @param {string} clubId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getMessagesForClub: async (clubId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'clubId' is not null or undefined
-            assertParamExists('getMessagesForClub', 'clubId', clubId)
-            const localVarPath = `/api/clubs/{clubId}/ClubMessages`
-                .replace(`{${"clubId"}}`, encodeURIComponent(String(clubId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Accept'] = 'text/plain,application/json,text/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
     }
 };
 
@@ -807,26 +661,26 @@ export const ClubMessagesApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} clubId 
-         * @param {CreateMessageRequest} createMessageRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createMessageForClub(clubId: string, createMessageRequest: CreateMessageRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateMessageResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createMessageForClub(clubId, createMessageRequest, options);
+        async getMessagesByClubId(clubId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetMessageResponse>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMessagesByClubId(clubId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ClubMessagesApi.createMessageForClub']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ClubMessagesApi.getMessagesByClubId']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
          * @param {string} clubId 
+         * @param {CreateMessageRequest} createMessageRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getMessagesForClub(clubId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetAllMessagesByClubIdResponse>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getMessagesForClub(clubId, options);
+        async sendMessage(clubId: string, createMessageRequest: CreateMessageRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetMessageResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.sendMessage(clubId, createMessageRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ClubMessagesApi.getMessagesForClub']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ClubMessagesApi.sendMessage']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -841,21 +695,21 @@ export const ClubMessagesApiFactory = function (configuration?: Configuration, b
         /**
          * 
          * @param {string} clubId 
-         * @param {CreateMessageRequest} createMessageRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createMessageForClub(clubId: string, createMessageRequest: CreateMessageRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateMessageResponse> {
-            return localVarFp.createMessageForClub(clubId, createMessageRequest, options).then((request) => request(axios, basePath));
+        getMessagesByClubId(clubId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<GetMessageResponse>> {
+            return localVarFp.getMessagesByClubId(clubId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @param {string} clubId 
+         * @param {CreateMessageRequest} createMessageRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMessagesForClub(clubId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<GetAllMessagesByClubIdResponse>> {
-            return localVarFp.getMessagesForClub(clubId, options).then((request) => request(axios, basePath));
+        sendMessage(clubId: string, createMessageRequest: CreateMessageRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetMessageResponse> {
+            return localVarFp.sendMessage(clubId, createMessageRequest, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -867,22 +721,22 @@ export class ClubMessagesApi extends BaseAPI {
     /**
      * 
      * @param {string} clubId 
-     * @param {CreateMessageRequest} createMessageRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public createMessageForClub(clubId: string, createMessageRequest: CreateMessageRequest, options?: RawAxiosRequestConfig) {
-        return ClubMessagesApiFp(this.configuration).createMessageForClub(clubId, createMessageRequest, options).then((request) => request(this.axios, this.basePath));
+    public getMessagesByClubId(clubId: string, options?: RawAxiosRequestConfig) {
+        return ClubMessagesApiFp(this.configuration).getMessagesByClubId(clubId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @param {string} clubId 
+     * @param {CreateMessageRequest} createMessageRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public getMessagesForClub(clubId: string, options?: RawAxiosRequestConfig) {
-        return ClubMessagesApiFp(this.configuration).getMessagesForClub(clubId, options).then((request) => request(this.axios, this.basePath));
+    public sendMessage(clubId: string, createMessageRequest: CreateMessageRequest, options?: RawAxiosRequestConfig) {
+        return ClubMessagesApiFp(this.configuration).sendMessage(clubId, createMessageRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -1165,7 +1019,7 @@ export const ClubsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createClub(createClubRequest: CreateClubRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateClubResponse>> {
+        async createClub(createClubRequest: CreateClubRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetClubResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createClub(createClubRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ClubsApi.createClub']?.[localVarOperationServerIndex]?.url;
@@ -1190,7 +1044,7 @@ export const ClubsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getClubById(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetClubByIdResponse>> {
+        async getClubById(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetClubResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getClubById(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ClubsApi.getClubById']?.[localVarOperationServerIndex]?.url;
@@ -1202,7 +1056,7 @@ export const ClubsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getClubsForUser(userId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetAllClubsResponse>>> {
+        async getClubsForUser(userId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetClubResponse>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getClubsForUser(userId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ClubsApi.getClubsForUser']?.[localVarOperationServerIndex]?.url;
@@ -1214,7 +1068,7 @@ export const ClubsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getStudentsInClub(clubId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetStudentByClubIdResponse>>> {
+        async getStudentsInClub(clubId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetUserResponse>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getStudentsInClub(clubId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ClubsApi.getStudentsInClub']?.[localVarOperationServerIndex]?.url;
@@ -1257,7 +1111,7 @@ export const ClubsApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createClub(createClubRequest: CreateClubRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateClubResponse> {
+        createClub(createClubRequest: CreateClubRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetClubResponse> {
             return localVarFp.createClub(createClubRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1276,7 +1130,7 @@ export const ClubsApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getClubById(id: string, options?: RawAxiosRequestConfig): AxiosPromise<GetClubByIdResponse> {
+        getClubById(id: string, options?: RawAxiosRequestConfig): AxiosPromise<GetClubResponse> {
             return localVarFp.getClubById(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1285,7 +1139,7 @@ export const ClubsApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getClubsForUser(userId?: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<GetAllClubsResponse>> {
+        getClubsForUser(userId?: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<GetClubResponse>> {
             return localVarFp.getClubsForUser(userId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1294,7 +1148,7 @@ export const ClubsApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStudentsInClub(clubId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<GetStudentByClubIdResponse>> {
+        getStudentsInClub(clubId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<GetUserResponse>> {
             return localVarFp.getStudentsInClub(clubId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1525,7 +1379,7 @@ export const MessagesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getMessageById(messageId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetMessageByIdResponse>> {
+        async getMessageById(messageId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetMessageResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getMessageById(messageId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['MessagesApi.getMessageById']?.[localVarOperationServerIndex]?.url;
@@ -1568,7 +1422,7 @@ export const MessagesApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMessageById(messageId: string, options?: RawAxiosRequestConfig): AxiosPromise<GetMessageByIdResponse> {
+        getMessageById(messageId: string, options?: RawAxiosRequestConfig): AxiosPromise<GetMessageResponse> {
             return localVarFp.getMessageById(messageId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1780,7 +1634,7 @@ export const WorkPlansApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createWorkPlanForClub(clubId: string, createWorkPlanRequest: CreateWorkPlanRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateWorkPlanResponse>> {
+        async createWorkPlanForClub(clubId: string, createWorkPlanRequest: CreateWorkPlanRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetWorkPlanResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createWorkPlanForClub(clubId, createWorkPlanRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WorkPlansApi.createWorkPlanForClub']?.[localVarOperationServerIndex]?.url;
@@ -1792,7 +1646,7 @@ export const WorkPlansApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCurrentWorkPlan(clubId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetCurrentWorkPlanResponse>> {
+        async getCurrentWorkPlan(clubId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetWorkPlanResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCurrentWorkPlan(clubId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WorkPlansApi.getCurrentWorkPlan']?.[localVarOperationServerIndex]?.url;
@@ -1816,7 +1670,7 @@ export const WorkPlansApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getWorkPlansForClub(clubId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetAllWorkPlansByClubIdResponse>>> {
+        async getWorkPlansForClub(clubId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetWorkPlanResponse>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getWorkPlansForClub(clubId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['WorkPlansApi.getWorkPlansForClub']?.[localVarOperationServerIndex]?.url;
@@ -1838,7 +1692,7 @@ export const WorkPlansApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createWorkPlanForClub(clubId: string, createWorkPlanRequest: CreateWorkPlanRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateWorkPlanResponse> {
+        createWorkPlanForClub(clubId: string, createWorkPlanRequest: CreateWorkPlanRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetWorkPlanResponse> {
             return localVarFp.createWorkPlanForClub(clubId, createWorkPlanRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1847,7 +1701,7 @@ export const WorkPlansApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCurrentWorkPlan(clubId: string, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentWorkPlanResponse> {
+        getCurrentWorkPlan(clubId: string, options?: RawAxiosRequestConfig): AxiosPromise<GetWorkPlanResponse> {
             return localVarFp.getCurrentWorkPlan(clubId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1865,7 +1719,7 @@ export const WorkPlansApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getWorkPlansForClub(clubId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<GetAllWorkPlansByClubIdResponse>> {
+        getWorkPlansForClub(clubId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<GetWorkPlanResponse>> {
             return localVarFp.getWorkPlansForClub(clubId, options).then((request) => request(axios, basePath));
         },
     };

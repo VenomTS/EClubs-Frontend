@@ -3,7 +3,8 @@ import ClubPage from "./pages/ClubPage.vue";
 import {createRouter, createWebHistory} from "vue-router";
 import RegisterPage from "./pages/RegisterPage.vue";
 import LoginPage from "./pages/LoginPage.vue";
-import {useUserStore} from "./stores/userStore.ts";
+import {useUserStore} from "./stores/user.store.ts";
+import AutomaticAttendancePage from "./pages/AutomaticAttendancePage.vue";
 
 const routes = [
     {
@@ -26,6 +27,12 @@ const routes = [
         path: '/clubs/:clubId',
         name: "Club",
         component: ClubPage,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: "/clubs/:clubId/attendance",
+        name: "ClubAttendance",
+        component: AutomaticAttendancePage,
         meta: { requiresAuth: true },
     },
 ]

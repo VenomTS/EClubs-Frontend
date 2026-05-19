@@ -117,7 +117,7 @@ async function submit() {
           Meeting Day
         </label>
 
-        <Dropdown
+        <Select
             v-model="meetingDay"
             :options="meetingDays"
             optionLabel="label"
@@ -133,7 +133,7 @@ async function submit() {
           School Period
         </label>
 
-        <Dropdown
+        <Select
             v-model="selectedPeriod"
             :options="periods"
             optionLabel="label"

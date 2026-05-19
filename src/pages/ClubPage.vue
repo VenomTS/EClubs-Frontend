@@ -3,26 +3,19 @@ import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
 
 import {
-  AttendancesApi,
-  type ClubMessageResponse,
-  ClubsApi, type ClubWorkPlansResponse, type GetAllAttendancesResponse,
-  type GetClubByIdResponse, type GetDomainsResponse, WorkPlansApi,
+  ClubsApi, type GetClubResponse
 } from "../../api";
-import StreamTab from "../components/clubTabs/StreamTab.vue";
-import WorkPlanTab from "../components/clubTabs/WorkPlanTab.vue";
-import AttendanceTab from "../components/clubTabs/AttendanceTab.vue";
+import StreamTab from "../components/tabs/StreamTab.vue";
+import WorkPlanTab from "../components/tabs/WorkPlanTab.vue";
+import AttendanceTab from "../components/tabs/AttendanceTab.vue";
 
 const clubsAPI = new ClubsApi();
-const workPlansAPI = new WorkPlansApi();
-const attendancesAPI = new AttendancesApi();
 const route = useRoute();
 const clubId = ref<string>("");
 
-const club = ref<GetClubByIdResponse>({professor: {}});
-const messages = ref<ClubMessageResponse[]>();
-const workPlans = ref<ClubWorkPlansResponse[]>();
-const domains = ref<GetDomainsResponse[]>();
-const attendances = ref<GetAllAttendancesResponse[]>();
+const club = ref<GetClubResponse>({professor: {}});
+
+const formattedCode = ref<string>("");
 
 watch(
     () => route.params.clubId,
@@ -34,31 +27,8 @@ watch(
       const response = await clubsAPI.getClubById(newId);
 
       club.value = response.data;
-      messages.value = club.value.messages;
-      workPlans.value = club.value.workPlans;
-
-      messages.value?.reverse();
-
-      try
-      {
-        const attendancesResponse = await attendancesAPI.getAttendancesForClub(newId);
-
-        attendances.value = attendancesResponse.data;
-      }
-      catch
-      {
-        console.log("Error pri fetching Attendances");
-      }
-
-      try
-      {
-        const domainsResponse = await workPlansAPI.getDomainsByClubId(newId);
-        domains.value = domainsResponse.data;
-      }
-      catch
-      {
-        console.log("Error pri fetching domains");
-      }
+      const code = club.value.code;
+      formattedCode.value = code?.slice(0, 3) + '-' + code?.slice(3, 6);
     },
     { immediate: true }
 );
@@ -96,7 +66,7 @@ watch(
             class="flex items-center gap-1 px-2 py-1 rounded-md bg-primary-500/10 border border-primary-500/30 text-primary-400 font-medium"
         >
           <i class="pi pi-key text-xs"></i>
-          Code: AAA-BBB
+          Code: {{ formattedCode }}
         </span>
 
       </div>

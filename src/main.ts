@@ -24,10 +24,10 @@ import Accordion from "primevue/accordion"
 import AccordionPanel from "primevue/accordionpanel"
 import AccordionHeader from "primevue/accordionheader"
 import AccordionContent from "primevue/accordioncontent"
-import {DatePicker, InputChips, InputNumber, SelectButton, Textarea, ToastService} from "primevue";
+import {DatePicker, Divider, InputChips, InputNumber, SelectButton, Textarea, ToastService} from "primevue";
 import router from "./router.ts";
 import {pinia} from "./pinia.ts";
-import {useUserStore} from "./stores/userStore.ts";
+import {useUserStore} from "./stores/user.store.ts";
 
 document.documentElement.classList.add("dark")
 
@@ -50,7 +50,6 @@ async function bootstrap()
     app.component('Message', Message)
     app.component('Toast', Toast)
     app.component("ProgressSpinner", ProgressSpinner);
-    app.component("Dropdown", Select);
     app.component("Select", Select);
     app.component("Tabs", Tabs);
     app.component("TabPanel", TabPanel);
@@ -68,6 +67,7 @@ async function bootstrap()
     app.component("InputChips", InputChips);
     app.component("DatePicker", DatePicker);
     app.component("SelectButton", SelectButton);
+    app.component("Divider", Divider);
 
 
     app.mount('#app');

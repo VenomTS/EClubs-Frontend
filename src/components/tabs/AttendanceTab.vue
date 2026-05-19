@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import StudentAttendance from "../students/StudentAttendance.vue"
-import {AttendancesApi, type GetAllAttendancesResponse} from "../../../api"
+import {AttendancesApi, type GetAttendanceResponse} from "../../../api"
 import {onMounted, ref} from "vue";
 
 const attendanceAPI = new AttendancesApi();
 // const userStore = useUserStore();
 
-const attendances = ref<GetAllAttendancesResponse[]>();
+const attendances = ref<GetAttendanceResponse[]>();
 
 const props = defineProps<{
   clubId: string;
