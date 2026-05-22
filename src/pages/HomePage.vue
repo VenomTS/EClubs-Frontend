@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import Menu from 'primevue/menu'
 
 import ClubCard from '../components/cards/ClubCard.vue'
 import CreateClubModal from '../components/modals/CreateClubModal.vue'
@@ -32,6 +33,7 @@ const hasRole = (role: string) =>
 const fetchClubs = async () => {
   loading.value = true
 
+
   const result = await clubStore.getClubsByUserId(
       userStore.userId
   )
@@ -46,8 +48,20 @@ const fetchClubs = async () => {
   loading.value = false
 }
 
-/* ---------------- ACTIONS ---------------- */
 
+const menu = ref()
+const items = [
+
+  {
+    label: 'Odjavi se',
+    icon: 'pi pi-sign-out',
+    command: () => {
+      userStore.logout?.()
+      router.push('/login')
+    }
+  }
+]
+/* ---------------- ACTIONS ---------------- */
 const handleClubSelect = (club: GetClubResponse) => {
   router.push(`/clubs/${club.id}`)
 }
@@ -91,6 +105,7 @@ onMounted(fetchClubs)
         <p class="text-content-secondary mt-1">
           Explore and manage your extracurricular activities
         </p>
+
       </div>
 
       <!-- ACTIONS -->
@@ -113,6 +128,17 @@ onMounted(fetchClubs)
                  border-none! text-content-primary!"
             @click="showJoinModal = true"
         />
+
+        <div class="relative">
+          <button
+              @click="menu.toggle($event)"
+              class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-hover border border-surface-border hover:bg-surface-card transition"
+          >
+            <i class="pi pi-user text-content-primary"></i>
+          </button>
+
+          <Menu ref="menu" :model="items" popup />
+        </div>
 
       </div>
     </div>
