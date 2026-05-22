@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref, watch } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute , useRouter } from "vue-router";
 
 import {
   ClubsApi, type GetClubResponse
@@ -12,6 +12,7 @@ import AttendanceTab from "../components/tabs/AttendanceTab.vue";
 const clubsAPI = new ClubsApi();
 const route = useRoute();
 const clubId = ref<string>("");
+const router = useRouter();
 
 const club = ref<GetClubResponse>({professor: {}});
 
@@ -68,6 +69,14 @@ watch(
           <i class="pi pi-key text-xs"></i>
           Code: {{ formattedCode }}
         </span>
+        <button
+            @click="router.back()"
+            class="ml-auto flex items-center gap-2 px-4 py-2 rounded-md bg-surface-hover border border-surface-border text-content-primary hover:bg-surface-card transition"
+        >
+          <i class="pi pi-arrow-left"></i>
+          Nazad
+        </button>
+
 
       </div>
     </div>
