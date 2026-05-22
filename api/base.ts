@@ -19,7 +19,7 @@ import type { Configuration } from './configuration';
 import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
 import globalAxios from 'axios';
 
-export const BASE_PATH = "https://192.168.1.101:8080".replace(/\/+$/, "");
+export const BASE_PATH = "https://109.237.41.125:8080".replace(/\/+$/, "");
 
 globalAxios.defaults.withCredentials = true;
 
