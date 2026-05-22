@@ -14,7 +14,7 @@
 
 
 import type { Configuration } from './configuration';
-// Some imports not used depending on template conditions
+// Some imports not used depending on template condition
 // @ts-ignore
 import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
 import globalAxios from 'axios';
