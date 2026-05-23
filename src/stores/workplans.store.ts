@@ -27,10 +27,14 @@ export const useWorkPlansStore = defineStore("workplans", () => {
             workPlansApi.createWorkPlanForClub(clubId, workPlan)
         );
 
+    const uploadWorkPlan = (clubId: string, file: File) =>
+        handleApi(() => workPlansApi.uploadWorkPlansForClub(clubId, file))
+
     return {
         getWorkPlansByClubId,
         getCurrentWorkPlan,
         getDomainsByClubId,
         createWorkPlan,
+        uploadWorkPlan,
     };
 });

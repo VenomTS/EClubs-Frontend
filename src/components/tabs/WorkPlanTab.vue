@@ -15,6 +15,8 @@ const workPlansStore = useWorkPlansStore()
 
 const clubId = route.params.clubId as string
 
+const fileUploadRef = ref();
+
 const showCreateWorkPlanModal = ref<boolean>(false);
 const showTakeAttendanceModal = ref<boolean>(false);
 
@@ -45,8 +47,6 @@ const hasWorkPlans = computed(() => workPlans.value.length > 0)
 
 /* ---------------- LOAD ---------------- */
 const loadData = async () => {
-
-  console.log("WAS CALLED")
 
   loading.value = true
 
@@ -81,6 +81,18 @@ const loadData = async () => {
   }
 }
 
+/* -------------- UPLOAD ---------------- */
+
+const onUpload = async (event: any) => {
+  const file = event.files[0]
+
+  if (!file) return
+
+  await workPlansStore.uploadWorkPlan(clubId, file);
+
+  loadData()
+}
+
 /* ---------------- INIT ---------------- */
 onMounted(loadData)
 </script>
@@ -108,13 +120,21 @@ onMounted(loadData)
 
       <div class="flex flex-col sm:flex-row gap-3 justify-center">
 
-        <Button
-            label="Import Work Plans"
-            icon="pi pi-upload"
-            class="bg-primary-500! border-none!
-                 hover:bg-primary-600!
-                 text-content-primary"
-            @click="$emit('import')"
+        <FileUpload
+            ref="fileUploadRef"
+            mode="basic"
+            name="file"
+            chooseLabel="Import Work Plans"
+            chooseIcon="pi pi-upload"
+            customUpload
+            :auto="true"
+            @uploader="onUpload"
+            class="p-button p-component
+           bg-primary-500!
+           border-none!
+           hover:bg-primary-600!
+           text-content-primary
+           rounded-xl!"
         />
 
         <Button

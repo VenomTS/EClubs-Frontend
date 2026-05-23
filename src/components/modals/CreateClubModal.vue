@@ -162,7 +162,7 @@ async function submit() {
           label="Poništi"
           severity="secondary"
           outlined
-          @click="$emit('zatvori')"
+          @click="$emit('close')"
       />
 
       <Button

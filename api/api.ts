@@ -1484,6 +1484,43 @@ export const WorkPlansApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 
          * @param {string} clubId 
+         * @param {Array<CreateWorkPlanRequest>} createWorkPlanRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        batchCreateWorkPlanForClub: async (clubId: string, createWorkPlanRequest: Array<CreateWorkPlanRequest>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'clubId' is not null or undefined
+            assertParamExists('batchCreateWorkPlanForClub', 'clubId', clubId)
+            // verify required parameter 'createWorkPlanRequest' is not null or undefined
+            assertParamExists('batchCreateWorkPlanForClub', 'createWorkPlanRequest', createWorkPlanRequest)
+            const localVarPath = `/api/clubs/{clubId}/WorkPlans/batch`
+                .replace(`{${"clubId"}}`, encodeURIComponent(String(clubId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createWorkPlanRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} clubId 
          * @param {CreateWorkPlanRequest} createWorkPlanRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1618,6 +1655,46 @@ export const WorkPlansApiAxiosParamCreator = function (configuration?: Configura
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} clubId 
+         * @param {File} [file] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadWorkPlansForClub: async (clubId: string, file?: File, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'clubId' is not null or undefined
+            assertParamExists('uploadWorkPlansForClub', 'clubId', clubId)
+            const localVarPath = `/api/clubs/{clubId}/WorkPlans/upload`
+                .replace(`{${"clubId"}}`, encodeURIComponent(String(clubId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+            const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
+
+
+            if (file !== undefined) { 
+                localVarFormParams.append('file', file as any);
+            }
+            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = localVarFormParams;
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -1627,6 +1704,19 @@ export const WorkPlansApiAxiosParamCreator = function (configuration?: Configura
 export const WorkPlansApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = WorkPlansApiAxiosParamCreator(configuration)
     return {
+        /**
+         * 
+         * @param {string} clubId 
+         * @param {Array<CreateWorkPlanRequest>} createWorkPlanRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async batchCreateWorkPlanForClub(clubId: string, createWorkPlanRequest: Array<CreateWorkPlanRequest>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.batchCreateWorkPlanForClub(clubId, createWorkPlanRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WorkPlansApi.batchCreateWorkPlanForClub']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
         /**
          * 
          * @param {string} clubId 
@@ -1676,6 +1766,19 @@ export const WorkPlansApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['WorkPlansApi.getWorkPlansForClub']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @param {string} clubId 
+         * @param {File} [file] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async uploadWorkPlansForClub(clubId: string, file?: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadWorkPlansForClub(clubId, file, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WorkPlansApi.uploadWorkPlansForClub']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -1685,6 +1788,16 @@ export const WorkPlansApiFp = function(configuration?: Configuration) {
 export const WorkPlansApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = WorkPlansApiFp(configuration)
     return {
+        /**
+         * 
+         * @param {string} clubId 
+         * @param {Array<CreateWorkPlanRequest>} createWorkPlanRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        batchCreateWorkPlanForClub(clubId: string, createWorkPlanRequest: Array<CreateWorkPlanRequest>, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.batchCreateWorkPlanForClub(clubId, createWorkPlanRequest, options).then((request) => request(axios, basePath));
+        },
         /**
          * 
          * @param {string} clubId 
@@ -1722,6 +1835,16 @@ export const WorkPlansApiFactory = function (configuration?: Configuration, base
         getWorkPlansForClub(clubId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<GetWorkPlanResponse>> {
             return localVarFp.getWorkPlansForClub(clubId, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {string} clubId 
+         * @param {File} [file] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadWorkPlansForClub(clubId: string, file?: File, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.uploadWorkPlansForClub(clubId, file, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -1729,6 +1852,17 @@ export const WorkPlansApiFactory = function (configuration?: Configuration, base
  * WorkPlansApi - object-oriented interface
  */
 export class WorkPlansApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} clubId 
+     * @param {Array<CreateWorkPlanRequest>} createWorkPlanRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public batchCreateWorkPlanForClub(clubId: string, createWorkPlanRequest: Array<CreateWorkPlanRequest>, options?: RawAxiosRequestConfig) {
+        return WorkPlansApiFp(this.configuration).batchCreateWorkPlanForClub(clubId, createWorkPlanRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {string} clubId 
@@ -1768,6 +1902,17 @@ export class WorkPlansApi extends BaseAPI {
      */
     public getWorkPlansForClub(clubId: string, options?: RawAxiosRequestConfig) {
         return WorkPlansApiFp(this.configuration).getWorkPlansForClub(clubId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} clubId 
+     * @param {File} [file] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public uploadWorkPlansForClub(clubId: string, file?: File, options?: RawAxiosRequestConfig) {
+        return WorkPlansApiFp(this.configuration).uploadWorkPlansForClub(clubId, file, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
