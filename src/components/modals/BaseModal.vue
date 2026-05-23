@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted } from "vue"
 
-const emit = defineEmits(["close"])
+const emit = defineEmits(["zatvori"])
 
 function close() {
-  emit("close")
+  emit("zatvori")
 }
 
 function handleEsc(e: KeyboardEvent) {

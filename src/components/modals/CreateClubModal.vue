@@ -5,8 +5,8 @@ import BaseModal from "./BaseModal.vue"
 import type {CreateClubModalData} from "../../interfaces/CreateClubModalData.ts";
 
 const emit = defineEmits<{
-  (e: "close"): void;
-  (e: "create", payload: CreateClubModalData): void;
+  (e: "zatvori"): void;
+  (e: "kreiraj", payload: CreateClubModalData): void;
 }>();
 
 const clubName = ref("")
@@ -17,11 +17,11 @@ const loading = ref(false)
 const submitted = ref(false)
 
 const meetingDays = [
-  { label: "Monday", value: 1 },
-  { label: "Tuesday", value: 2 },
-  { label: "Wednesday", value: 3 },
-  { label: "Thursday", value: 4 },
-  { label: "Friday", value: 5 }
+  { label: "Ponedjeljak", value: 1 },
+  { label: "Utorak", value: 2 },
+  { label: "Srijeda", value: 3 },
+  { label: "Četvrtak", value: 4 },
+  { label: "Petak", value: 5 }
 ]
 
 const periods = Array.from({ length: 8 }, (_, i) => ({
@@ -69,7 +69,7 @@ async function submit() {
   if(meetingDay.value == null)
     return;
 
-  emit("create", {
+  emit("kreiraj", {
     name: clubName.value,
     day: meetingDay.value,
     startTime: startTime,
@@ -77,21 +77,21 @@ async function submit() {
   })
 
   loading.value = false
-  emit("close")
+  emit("zatvori")
 }
 </script>
 
 <template>
-  <BaseModal @close="$emit('close')">
+  <BaseModal @close="$emit('zatvori')">
 
     <!-- Header -->
     <div class="mb-6 space-y-1">
       <h2 class="text-xl font-semibold text-content-primary">
-        Create Club
+        Kreiraj Sekciju
       </h2>
 
       <p class="text-sm text-content-secondary">
-        Add a new extracurricular club
+        Dodaj novu sekciju
       </p>
     </div>
 
@@ -101,12 +101,12 @@ async function submit() {
       <!-- Club Name -->
       <div class="flex flex-col gap-2">
         <label class="text-sm text-content-secondary">
-          Club Name
+          Ime Sekcije
         </label>
 
         <InputText
             v-model="clubName"
-            placeholder="Chess Club..."
+            placeholder="Šah klub..."
             class="w-full"
         />
       </div>
@@ -114,7 +114,7 @@ async function submit() {
       <!-- Meeting Day Dropdown -->
       <div class="flex flex-col gap-2">
         <label class="text-sm text-content-secondary">
-          Meeting Day
+          Dan sasatajanja
         </label>
 
         <Select
@@ -122,7 +122,7 @@ async function submit() {
             :options="meetingDays"
             optionLabel="label"
             optionValue="value"
-            placeholder="Select day"
+            placeholder="Odaberi Dan"
             class="w-full"
         />
       </div>
@@ -130,7 +130,7 @@ async function submit() {
       <!-- Period -->
       <div class="flex flex-col gap-2">
         <label class="text-sm text-content-secondary">
-          School Period
+          Školski Čas
         </label>
 
         <Select
@@ -148,7 +148,7 @@ async function submit() {
           v-if="submitted && !isValid"
           class="text-danger-500"
       >
-        Please fill all fields.
+        Molimo popunite sva polja.
       </small>
 
     </div>
@@ -159,14 +159,14 @@ async function submit() {
              border-t border-surface-border"
     >
       <Button
-          label="Cancel"
+          label="Poništi"
           severity="secondary"
           outlined
-          @click="$emit('close')"
+          @click="$emit('zatvori')"
       />
 
       <Button
-          label="Create"
+          label="Kreiraj"
           :loading="loading"
           :disabled="loading"
           class="bg-primary-500! border-none!
