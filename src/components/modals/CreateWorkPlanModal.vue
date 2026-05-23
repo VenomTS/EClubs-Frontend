@@ -11,7 +11,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: "close"): void
+  (e: "zatvori"): void
 }>()
 
 const workPlansStore = useWorkPlansStore()
@@ -54,16 +54,16 @@ const errors = computed(() => {
   const e: Record<string, string> = {}
 
   if (!resolvedDomain.value)
-    e.domain = "Domain is required."
+    e.domain = "Domena je obavezna."
 
   if (!form.unit.trim())
-    e.unit = "Unit is required."
+    e.unit = "Jedinica je obavezna."
 
   if (!form.learningOutcome.trim())
-    e.learningOutcome = "Learning outcome is required."
+    e.learningOutcome = "Ishod učenja je obavezan."
 
   if (normalizedIndicators.value.length === 0)
-    e.indicators = "Add at least one indicator."
+    e.indicators = "Dodaj bar jedan indikator."
 
   return e
 })
@@ -91,24 +91,24 @@ const submit = async () => {
   submitting.value = false
 
   if (result.success) {
-    emit("close")
+    emit("zatvori")
   }
 }
 </script>
 
 <template>
-  <BaseModal @close="emit('close')">
+  <BaseModal @close="emit('zatvori')">
 
     <div class="space-y-6">
 
       <!-- HEADER -->
       <header>
         <h2 class="text-xl font-semibold text-content-primary">
-          Create Work Plan
+          Kreiraj Plan Rada
         </h2>
 
         <p class="text-sm text-content-secondary">
-          Choose an existing domain or create a new one.
+          Odaberi postojeću domenu ili kreiraj novu.
         </p>
       </header>
 
@@ -117,7 +117,7 @@ const submit = async () => {
 
         <div class="flex justify-between items-center">
           <label class="text-sm font-medium text-content-primary">
-            Domain
+            Domena
           </label>
 
           <Button
@@ -135,9 +135,9 @@ const submit = async () => {
             v-if="!createNewDomain"
             v-model="form.selectedDomain"
             :options="domains"
-            optionLabel="domain"
-            optionValue="domain"
-            placeholder="Select domain"
+            optionLabel="domena"
+            optionValue="domena"
+            placeholder="Odaberi domenu"
             class="w-full"
             :invalid="submitted && !!errors.domain"
         />
@@ -146,7 +146,7 @@ const submit = async () => {
         <InputText
             v-else
             v-model="form.newDomain"
-            placeholder="Enter new domain"
+            placeholder="Unesi novu domenu"
             class="w-full"
             :invalid="submitted && !!errors.domain"
         />
@@ -165,7 +165,7 @@ const submit = async () => {
 
         <InputText
             v-model="form.unit"
-            placeholder="Fractions"
+            placeholder="Frakcije"
             class="w-full"
             :invalid="submitted && !!errors.unit"
         />
@@ -183,7 +183,7 @@ const submit = async () => {
 
         <InputText
             v-model="form.learningOutcome"
-            placeholder="Students understand fractions"
+            placeholder="Studenti razumiju frakcije"
             class="w-full"
             :invalid="submitted && !!errors.learningOutcome"
         />
@@ -196,12 +196,12 @@ const submit = async () => {
       <!-- INDICATORS -->
       <section class="space-y-2">
         <label class="text-sm font-medium text-content-primary">
-          Indicators
+          Indikatori
         </label>
 
         <InputChips
             v-model="form.indicators"
-            placeholder="Press Enter to add indicator"
+            placeholder="Pritisnite Enter za dodavanje indikatora"
             class="w-full"
             :invalid="submitted && !!errors.indicators"
         />
@@ -215,15 +215,15 @@ const submit = async () => {
       <footer class="flex justify-end gap-3 border-t border-surface-border pt-5">
 
         <Button
-            label="Cancel"
+            label="Poništi"
             outlined
             severity="secondary"
             :disabled="submitting"
-            @click="emit('close')"
+            @click="emit('zatvori')"
         />
 
         <Button
-            label="Create Work Plan"
+            label="Kreiraj Plan Rada"
             icon="pi pi-check"
             :loading="submitting"
             :disabled="!isValid"

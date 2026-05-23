@@ -2,7 +2,7 @@
 import { ref, computed } from "vue"
 import BaseModal from "./BaseModal.vue"
 
-const emit = defineEmits(["close", "join"])
+const emit = defineEmits(["zatvori", "Pridruži se"])
 
 const rawCode = ref("")
 const loading = ref(false)
@@ -50,31 +50,31 @@ async function submit() {
   await new Promise(r => setTimeout(r, 600))
 
   // emit CLEAN value (no dash)
-  emit("join", rawCode.value)
+  emit("Pridruži se", rawCode.value)
 
   loading.value = false
-  emit("close")
+  emit("zatvori")
 }
 </script>
 
 <template>
-  <BaseModal @close="$emit('close')">
+  <BaseModal @close="$emit('zatvori')">
 
     <!-- Header -->
     <div class="mb-6 space-y-1">
       <h2 class="text-xl font-semibold text-content-primary">
-        Join Club
+        Pridruži se sekciji
       </h2>
 
       <p class="text-sm text-content-secondary">
-        Enter the 6-character club code.
+        Unesi kod od 6 znakova.
       </p>
     </div>
 
     <!-- Input -->
     <div class="flex flex-col gap-2">
       <label class="text-sm text-content-secondary">
-        Club Code
+        Kod sekcije
       </label>
 
       <InputText
@@ -92,7 +92,7 @@ async function submit() {
         v-if="submitted && !isValid"
         class="text-danger-500"
     >
-      Code must be exactly 6 characters.
+      Kod mora biti tačno 6 znakova.
     </small>
 
     <!-- Footer -->
@@ -100,14 +100,14 @@ async function submit() {
         class="flex justify-end gap-3 mt-8 pt-4 border-t border-surface-border"
     >
       <Button
-          label="Cancel"
+          label="Poništi"
           severity="secondary"
           outlined
-          @click="$emit('close')"
+          @click="$emit('zatvori')"
       />
 
       <Button
-          :label="loading ? 'Joining...' : 'Join'"
+          :label="loading ? 'Pridruživanje...' : 'Pridruži se'"
           :loading="loading"
           :disabled="loading"
           class="bg-primary-500! border-none! hover:bg-primary-600!"
