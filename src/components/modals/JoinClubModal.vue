@@ -2,7 +2,7 @@
 import { ref, computed } from "vue"
 import BaseModal from "./BaseModal.vue"
 
-const emit = defineEmits(["zatvori", "Pridruži se"])
+const emit = defineEmits(["close", "join"])
 
 const rawCode = ref("")
 const loading = ref(false)
@@ -50,15 +50,15 @@ async function submit() {
   await new Promise(r => setTimeout(r, 600))
 
   // emit CLEAN value (no dash)
-  emit("Pridruži se", rawCode.value)
+  emit("join", rawCode.value)
 
   loading.value = false
-  emit("zatvori")
+  emit("close")
 }
 </script>
 
 <template>
-  <BaseModal @close="$emit('zatvori')">
+  <BaseModal @close="$emit('close')">
 
     <!-- Header -->
     <div class="mb-6 space-y-1">
@@ -103,7 +103,7 @@ async function submit() {
           label="Poništi"
           severity="secondary"
           outlined
-          @click="$emit('zatvori')"
+          @click="$emit('close')"
       />
 
       <Button

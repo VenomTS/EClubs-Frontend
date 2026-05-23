@@ -5,8 +5,8 @@ import BaseModal from "./BaseModal.vue"
 import type {CreateClubModalData} from "../../interfaces/CreateClubModalData.ts";
 
 const emit = defineEmits<{
-  (e: "zatvori"): void;
-  (e: "kreiraj", payload: CreateClubModalData): void;
+  (e: "close"): void;
+  (e: "create", payload: CreateClubModalData): void;
 }>();
 
 const clubName = ref("")
@@ -69,7 +69,7 @@ async function submit() {
   if(meetingDay.value == null)
     return;
 
-  emit("kreiraj", {
+  emit("create", {
     name: clubName.value,
     day: meetingDay.value,
     startTime: startTime,
@@ -77,12 +77,12 @@ async function submit() {
   })
 
   loading.value = false
-  emit("zatvori")
+  emit("close")
 }
 </script>
 
 <template>
-  <BaseModal @close="$emit('zatvori')">
+  <BaseModal @close="$emit('close')">
 
     <!-- Header -->
     <div class="mb-6 space-y-1">
@@ -138,7 +138,7 @@ async function submit() {
             :options="periods"
             optionLabel="label"
             optionValue="value"
-            placeholder="Select period"
+            placeholder="Odaberi čas"
             class="w-full"
         />
       </div>

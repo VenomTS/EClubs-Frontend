@@ -11,7 +11,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: "zatvori"): void
+  (e: "close"): void
 }>()
 
 const workPlansStore = useWorkPlansStore()
@@ -91,13 +91,13 @@ const submit = async () => {
   submitting.value = false
 
   if (result.success) {
-    emit("zatvori")
+    emit("close")
   }
 }
 </script>
 
 <template>
-  <BaseModal @close="emit('zatvori')">
+  <BaseModal @close="emit('close')">
 
     <div class="space-y-6">
 
@@ -124,7 +124,7 @@ const submit = async () => {
               size="small"
               text
               icon="pi pi-plus"
-              :label="createNewDomain ? 'Use existing' : 'New domain'"
+              :label="createNewDomain ? 'Koristi Postojeću' : 'Nova Domena'"
               class="text-primary-500"
               @click="createNewDomain = !createNewDomain"
           />
@@ -135,8 +135,8 @@ const submit = async () => {
             v-if="!createNewDomain"
             v-model="form.selectedDomain"
             :options="domains"
-            optionLabel="domena"
-            optionValue="domena"
+            optionLabel="domain"
+            optionValue="domain"
             placeholder="Odaberi domenu"
             class="w-full"
             :invalid="submitted && !!errors.domain"
@@ -160,7 +160,7 @@ const submit = async () => {
       <!-- UNIT -->
       <section class="space-y-2">
         <label class="text-sm font-medium text-content-primary">
-          Unit
+          Jedinica
         </label>
 
         <InputText
@@ -178,7 +178,7 @@ const submit = async () => {
       <!-- LEARNING OUTCOME -->
       <section class="space-y-2">
         <label class="text-sm font-medium text-content-primary">
-          Learning Outcome
+          Ishod učenja
         </label>
 
         <InputText
@@ -219,7 +219,7 @@ const submit = async () => {
             outlined
             severity="secondary"
             :disabled="submitting"
-            @click="emit('zatvori')"
+            @click="emit('close')"
         />
 
         <Button

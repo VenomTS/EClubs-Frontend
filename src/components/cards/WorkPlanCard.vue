@@ -4,8 +4,8 @@ import type { GetWorkPlanResponse } from "../../../api"
 defineProps<{ plan: GetWorkPlanResponse }>()
 
 const emit = defineEmits<{
-  (e: "uredi", plan: GetWorkPlanResponse): void
-  (e: "izbriši", plan: GetWorkPlanResponse): void
+  (e: "edit", plan: GetWorkPlanResponse): void
+  (e: "delete", plan: GetWorkPlanResponse): void
 }>()
 
 const getIndicators = (value?: string) => {
@@ -78,7 +78,7 @@ const getIndicators = (value?: string) => {
           </button>
 
           <button
-              @click="emit('izbriši', plan)"
+              @click="emit('delete', plan)"
               class="
               p-2 rounded-lg
               text-content-muted

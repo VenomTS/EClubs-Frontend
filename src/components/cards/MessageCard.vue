@@ -8,8 +8,8 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: "uredi", message: GetMessageResponse): void
-  (e: "izbriši", message: GetMessageResponse): void
+  (e: "edit", message: GetMessageResponse): void
+  (e: "delete", message: GetMessageResponse): void
 }>()
 
 const isOwner = computed(() =>
@@ -33,8 +33,8 @@ const formattedDate = computed(() => {
   })
 })
 
-const handleEdit = () => emit("uredi", props.message)
-const handleDelete = () => emit("izbriši", props.message)
+const handleEdit = () => emit("edit", props.message)
+const handleDelete = () => emit("delete", props.message)
 </script>
 
 <template>

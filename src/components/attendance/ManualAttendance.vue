@@ -115,7 +115,7 @@ defineExpose({
         <div class="flex gap-2">
 
           <Button
-              label="Present"
+              label="Prisutan"
               icon="pi pi-check"
               :severity="
               attendance[student.id!] === 'present'
@@ -126,7 +126,7 @@ defineExpose({
           />
 
           <Button
-              label="Absent"
+              label="Odsutan"
               icon="pi pi-times"
               :severity="
               attendance[student.id!] === 'absent'

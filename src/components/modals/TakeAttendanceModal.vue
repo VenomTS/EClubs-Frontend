@@ -78,7 +78,7 @@ onMounted(async () => {
     students.value = result.data
   } else {
     console.error(
-        `Failed to load students (${result.status})`,
+        `Greška pri učitavanju studenata (${result.status})`,
         result.message
     )
   }
@@ -93,11 +93,11 @@ onMounted(async () => {
       <!-- HEADER -->
       <header class="text-center space-y-2">
         <h2 class="text-xl font-semibold text-content-primary">
-          Take Attendance
+          Zabilježi prisustvo
         </h2>
 
         <p class="text-sm text-content-secondary">
-          Choose how you want to record attendance.
+          Odaberite kako želite zabilježiti prisustvo.
         </p>
       </header>
 
@@ -125,7 +125,7 @@ onMounted(async () => {
             ]"
           >
             <i class="pi pi-user-edit" />
-            Manual
+            Manuelno
           </button>
 
           <!-- AUTOMATIC -->
@@ -139,7 +139,7 @@ onMounted(async () => {
             ]"
           >
             <i class="pi pi-bolt" />
-            Automatic
+            Automatsko
           </button>
         </div>
 
@@ -164,7 +164,7 @@ onMounted(async () => {
       <footer class="flex justify-end gap-2 pt-4 border-t border-surface-border">
 
         <Button
-            label="Close"
+            label="Zatvori"
             icon="pi pi-times"
             outlined
             severity="secondary"
@@ -172,7 +172,7 @@ onMounted(async () => {
         />
 
         <Button
-            label="Save"
+            label="Spasi"
             icon="pi pi-check"
             severity="success"
             @click="handleAttendance"
