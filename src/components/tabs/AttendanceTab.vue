@@ -48,7 +48,7 @@ onMounted(async () => {
                rounded-xl p-6 text-center"
     >
       <p class="text-sm text-content-secondary">
-        No attendance records available
+        Nema zabilježenog prisustva
       </p>
     </div>
 

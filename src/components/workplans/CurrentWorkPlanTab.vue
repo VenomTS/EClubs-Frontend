@@ -36,11 +36,11 @@ const indicators = computed(() => {
       "
     >
       <p class="text-content-secondary text-sm font-medium">
-        No current work plan available
+        Nema dostupnog trenutnog plana rada
       </p>
 
       <p class="text-xs text-content-muted">
-        A work plan must be created or selected before taking attendance.
+        Plan rada mora biti kreiran ili odabran prije evidentiranja prisustva.
       </p>
     </div>
 
@@ -61,7 +61,7 @@ const indicators = computed(() => {
           <!-- TITLE -->
           <div class="space-y-1">
             <p class="text-xs text-content-muted uppercase tracking-wide">
-              Current Work Plan
+              Trenutni plan rada
             </p>
 
             <h2 class="text-lg font-semibold text-content-primary">
@@ -79,7 +79,7 @@ const indicators = computed(() => {
             <!-- EDIT (SECONDARY) -->
             <Button
                 icon="pi pi-pencil"
-                label="Edit"
+                label="Uredi"
                 severity="secondary"
                 outlined
                 class="
@@ -94,7 +94,7 @@ const indicators = computed(() => {
             <!-- TAKE ATTENDANCE (PRIMARY) -->
             <Button
                 icon="pi pi-check-circle"
-                label="Take Attendance"
+                label="Zabilježi prisustvo"
                 class="
           bg-primary-500!
           hover:bg-primary-600!
@@ -116,7 +116,7 @@ const indicators = computed(() => {
 
         <!-- HELP TEXT -->
         <p class="text-xs text-content-muted mt-3">
-          Click “Take Attendance” when students are present in class
+          Klikni na "Evidentiraj prisustvo" kada su studenti budu prisutni na nastavi
         </p>
       </div>
 
@@ -132,7 +132,7 @@ const indicators = computed(() => {
           "
         >
           <p class="text-xs text-content-muted uppercase mb-2">
-            Learning Outcome
+            Ishod učenja
           </p>
 
           <p class="text-sm text-content-secondary leading-relaxed">
@@ -144,7 +144,7 @@ const indicators = computed(() => {
         <div v-if="indicators.length > 0" class="space-y-2">
 
           <p class="text-xs text-content-muted uppercase">
-            Indicators
+            Indikatori
           </p>
 
           <div class="flex flex-wrap gap-2">

@@ -31,12 +31,12 @@ const loading = ref(true)
 
 const tabs = [
   {
-    label: 'Current Work Plan',
+    label: 'Trenutni plan rada',
     value: 'current',
     icon: 'pi pi-bolt'
   },
   {
-    label: 'All Work Plans',
+    label: 'Svi planovi rada',
     value: 'all',
     icon: 'pi pi-list'
   }
@@ -105,7 +105,7 @@ onMounted(loadData)
         v-if="loading"
         class="text-content-muted text-sm"
     >
-      Loading work plans...
+      Učitavanje radnih planova...
     </div>
 
     <!-- EMPTY STATE -->
@@ -115,7 +115,7 @@ onMounted(loadData)
              rounded-2xl p-10 text-center space-y-6"
     >
       <p class="text-content-secondary text-sm">
-        No work plans available
+        Nema dostupnih planova rada.
       </p>
 
       <div class="flex flex-col sm:flex-row gap-3 justify-center">
@@ -124,7 +124,7 @@ onMounted(loadData)
             ref="fileUploadRef"
             mode="basic"
             name="file"
-            chooseLabel="Import Work Plans"
+            chooseLabel="Uvezi plan rada"
             chooseIcon="pi pi-upload"
             customUpload
             :auto="true"
@@ -138,7 +138,7 @@ onMounted(loadData)
         />
 
         <Button
-            label="Add Work Plan"
+            label="Dodaj Plan Rada"
             icon="pi pi-plus"
             severity="secondary"
             outlined

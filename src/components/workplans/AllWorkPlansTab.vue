@@ -58,11 +58,11 @@ const toggle = (domain: string) => {
 
       <div>
         <h2 class="text-sm font-semibold text-content-primary">
-          All Work Plans
+          Svi planovi rada
         </h2>
 
         <p class="text-xs text-content-muted">
-          Manage work plans by subject
+          Upravljanje planovima rada po predmetima
         </p>
       </div>
 
@@ -97,11 +97,11 @@ const toggle = (domain: string) => {
       "
     >
       <p class="text-sm text-content-secondary">
-        No work plans found
+        Nema pronađenih planova rada.
       </p>
 
       <p class="text-xs text-content-muted mt-1">
-        Click “Add Work Plan” to create your first one
+        Kliknite na "Dodaj plan rada" da kreirate svoj prvi
       </p>
     </div>
 

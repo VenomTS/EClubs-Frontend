@@ -89,7 +89,7 @@ onMounted(loadMessages)
           ref="textareaRef"
           v-model="newMessage"
           class="w-full resize-none bg-transparent text-content-primary text-sm outline-none overflow-hidden"
-          placeholder="Write an announcement..."
+          placeholder="Napiši poruku..."
           rows="1"
           @input="autoResize"
           @keydown="handleKeyDown"
@@ -100,7 +100,7 @@ onMounted(loadMessages)
             :disabled="!newMessage.trim()"
             class="bg-primary-500! border-none! hover:bg-primary-600! text-content-primary"
             icon="pi pi-send"
-            label="Post"
+            label="Postavi"
             size="small"
             @click="sendMessage"
         />
@@ -113,7 +113,7 @@ onMounted(loadMessages)
         class="bg-surface-card border border-surface-border rounded-xl p-6 text-center"
     >
       <p class="text-sm text-content-secondary">
-        No messages yet
+        Nema poruka
       </p>
     </div>
 
