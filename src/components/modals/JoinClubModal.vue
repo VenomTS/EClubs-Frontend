@@ -92,7 +92,7 @@ async function submit() {
         v-if="submitted && !isValid"
         class="text-danger-500"
     >
-      Kod mora biti tačno 6 znakova.
+      Kod mora biti tačno 6 znakova dug.
     </small>
 
     <!-- Footer -->

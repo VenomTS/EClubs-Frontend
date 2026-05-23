@@ -25,23 +25,23 @@ const formatDate = (date: string) => {
 const statusMeta = (status: number | string) => {
   if (status === 0 || status === "Present")
     return {
-      label: "Present",
+      label: "Prisutan",
       class: "text-green-400 border-green-400/30 bg-green-400/10"
     }
 
   if (status === 1 || status === "Absent")
     return {
-      label: "Absent",
+      label: "Odsutan",
       class: "text-red-400 border-red-400/30 bg-red-400/10"
     }
 
   if (status === 2 || status === "Unrealized")
     return {
-      label: "Unrealized",
+      label: "Nerealizovano",
       class: "text-yellow-400 border-yellow-400/30 bg-yellow-400/10"
     }
 
-  return { label: "Unknown", class: "" }
+  return { label: "Nepoznato", class: "" }
 }
 
 function rateStudent(e: Event) {
@@ -86,7 +86,7 @@ function rateStudent(e: Event) {
           </span>
 
           <span class="text-xs text-content-secondary">
-            Click to view attendance
+            Kliklni da vidiš prisustvo
           </span>
         </div>
       </div>
@@ -139,7 +139,7 @@ function rateStudent(e: Event) {
             v-if="data.attendanceHistory.length === 0"
             class="text-sm text-content-secondary"
         >
-          No attendance data
+          Nema informacija o prisustvu.
         </div>
 
         <div v-else class="space-y-2">
