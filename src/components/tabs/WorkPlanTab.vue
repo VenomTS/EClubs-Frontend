@@ -90,7 +90,7 @@ const onUpload = async (event: any) => {
 
   await workPlansStore.uploadWorkPlan(clubId, file);
 
-  loadData()
+  await loadData()
 }
 
 /* ---------------- INIT ---------------- */
