@@ -33,11 +33,11 @@ onMounted(async () => {
     <!-- HEADER -->
     <div class="flex items-center justify-between">
       <h2 class="text-sm font-medium text-content-primary">
-        Student Attendance
+        Prisustvo učenika
       </h2>
 
       <span class="text-xs text-content-secondary">
-        Click a student to view history
+        Klikni na učenika da vidiš historiju
       </span>
     </div>
 
