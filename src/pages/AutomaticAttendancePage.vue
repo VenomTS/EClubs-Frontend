@@ -46,7 +46,7 @@ onMounted(async () => {
     const studentId = userStore.userId
 
     if (!clubId || !studentId) {
-      throw new Error("Missing required data")
+      throw new Error("Nedostaju obavezni podaci")
     }
 
     const result = await attendanceStore.markPresent(
@@ -58,15 +58,15 @@ onMounted(async () => {
 
     if (result.success) {
       success.value = true
-      message.value = "✅ Attendance successfully recorded!"
+      message.value = "Prisustvo uspješno zabiilježeno!"
     } else {
-      throw new Error("Attendance failed")
+      throw new Error("Evidentiranje prisustva nije uspjelo")
     }
 
   } catch (e) {
     loading.value = false
     error.value = true
-    message.value = "❌ Unable to record attendance."
+    message.value = "Nije moguće evidentirati prisustvo."
   }
 
   /* DELAY BEFORE REDIRECT */
@@ -106,11 +106,11 @@ onMounted(async () => {
         <i class="pi pi-spin pi-spinner text-5xl text-primary-500" />
 
         <h2 class="text-xl font-semibold">
-          Please wait...
+          Molimo sačekajte...
         </h2>
 
         <p class="text-content-secondary">
-          Marking your attendance.
+          Bilježimo vaše prisustvo.
         </p>
       </div>
 
@@ -120,7 +120,7 @@ onMounted(async () => {
         <i class="pi pi-check-circle text-6xl text-green-500" />
 
         <h2 class="text-2xl font-semibold">
-          Attendance Recorded
+          Prisustvo zabilježeno
         </h2>
 
         <p class="text-content-secondary">
@@ -128,7 +128,7 @@ onMounted(async () => {
         </p>
 
         <p class="text-sm text-content-secondary">
-          Returning shortly...
+          Povratak na prethodnu stranicu...
         </p>
       </div>
 
@@ -138,7 +138,7 @@ onMounted(async () => {
         <i class="pi pi-times-circle text-6xl text-red-500" />
 
         <h2 class="text-2xl font-semibold">
-          Something went wrong
+          Nešto nije uredu
         </h2>
 
         <p class="text-content-secondary">
@@ -146,7 +146,7 @@ onMounted(async () => {
         </p>
 
         <p class="text-sm text-content-secondary">
-          Returning shortly...
+          Povratak na prethodnu stranicu...
         </p>
       </div>
 
