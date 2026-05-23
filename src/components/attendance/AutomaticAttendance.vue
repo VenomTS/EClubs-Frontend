@@ -26,12 +26,12 @@ const attendanceUrl = computed(() =>
       <i class="pi pi-qrcode text-4xl text-primary-500" />
 
       <h3 class="text-xl font-semibold text-content-primary">
-        Automatic Attendance
+        Automatsko prisutvo
       </h3>
 
       <p class="text-sm text-content-secondary max-w-md">
-        Students scan this QR code using their phone camera.
-        Attendance will be recorded automatically.
+        Studenti skeniraju QR kod sa svojim telefonima.
+        Prisustvo će se automatski zapisati.
       </p>
     </div>
 
@@ -51,7 +51,7 @@ const attendanceUrl = computed(() =>
         class="bg-surface-card border border-surface-border
              rounded-xl px-5 py-3 text-sm text-content-secondary"
     >
-      Waiting for students to scan…
+      Čeka se skeniranje studenata...
     </div>
 
   </div>
