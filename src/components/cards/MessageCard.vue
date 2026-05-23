@@ -8,8 +8,8 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: "edit", message: GetMessageResponse): void
-  (e: "delete", message: GetMessageResponse): void
+  (e: "uredi", message: GetMessageResponse): void
+  (e: "izbriši", message: GetMessageResponse): void
 }>()
 
 const isOwner = computed(() =>
@@ -33,8 +33,8 @@ const formattedDate = computed(() => {
   })
 })
 
-const handleEdit = () => emit("edit", props.message)
-const handleDelete = () => emit("delete", props.message)
+const handleEdit = () => emit("uredi", props.message)
+const handleDelete = () => emit("izbriši", props.message)
 </script>
 
 <template>
@@ -109,7 +109,7 @@ const handleDelete = () => emit("delete", props.message)
     <!-- CONTENT -->
     <div class="mt-4">
       <p class="text-content-secondary leading-relaxed whitespace-pre-wrap">
-        {{ message.content ?? "No content" }}
+        {{ message.content ?? "Nema sadržaja" }}
       </p>
     </div>
   </div>

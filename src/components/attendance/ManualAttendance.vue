@@ -77,11 +77,11 @@ defineExpose({
              bg-surface-card space-y-2"
     >
       <label class="text-sm font-semibold text-content-primary">
-        Attendance Date OVO NIJE ATTENDANCE DATE, OVO JE DATE KADA SE ODVIO OVAJ SESSION! PROMJENITI
+        Datum odvijanja nastavne jedinice.
       </label>
 
       <p class="text-xs text-content-secondary">
-        Select the day for which attendance is recorded.
+        Odaberite dan odvijanja nastavne jedinice.
       </p>
 
       <DatePicker

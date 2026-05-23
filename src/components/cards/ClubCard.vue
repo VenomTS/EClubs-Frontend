@@ -73,7 +73,7 @@ const handleClick = () => {
           border border-primary-500/20
         "
       >
-        Club
+        Sekcija
       </span>
     </div>
 
@@ -97,7 +97,7 @@ const handleClick = () => {
 
       <div>
         <p class="text-sm text-content-secondary">
-          Professor
+          Profesor
         </p>
 
         <p class="text-sm font-medium text-content-primary">

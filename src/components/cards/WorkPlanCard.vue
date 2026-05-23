@@ -4,8 +4,8 @@ import type { GetWorkPlanResponse } from "../../../api"
 defineProps<{ plan: GetWorkPlanResponse }>()
 
 const emit = defineEmits<{
-  (e: "edit", plan: GetWorkPlanResponse): void
-  (e: "delete", plan: GetWorkPlanResponse): void
+  (e: "uredi", plan: GetWorkPlanResponse): void
+  (e: "izbriši", plan: GetWorkPlanResponse): void
 }>()
 
 const getIndicators = (value?: string) => {
@@ -41,7 +41,7 @@ const getIndicators = (value?: string) => {
         <div class="space-y-1">
 
           <p class="text-xs text-content-muted uppercase tracking-wide">
-            Work Plan
+            Plan Rada
           </p>
 
           <h3 class="text-lg font-semibold text-content-primary leading-tight">
@@ -72,13 +72,13 @@ const getIndicators = (value?: string) => {
               hover:bg-primary-500/10
               transition
             "
-              title="Edit"
+              title="Uredi"
           >
             <i class="pi pi-pencil text-sm"></i>
           </button>
 
           <button
-              @click="emit('delete', plan)"
+              @click="emit('izbriši', plan)"
               class="
               p-2 rounded-lg
               text-content-muted
@@ -86,7 +86,7 @@ const getIndicators = (value?: string) => {
               hover:bg-danger-500/10
               transition
             "
-              title="Delete"
+              title="izbriši"
           >
             <i class="pi pi-trash text-sm"></i>
           </button>
@@ -104,7 +104,7 @@ const getIndicators = (value?: string) => {
         "
       >
         <p class="text-xs uppercase tracking-wide text-content-muted mb-2">
-          Learning Outcome
+          Ishod učenja
         </p>
 
         <p class="text-sm text-content-secondary leading-relaxed">
@@ -116,7 +116,7 @@ const getIndicators = (value?: string) => {
       <div v-if="plan.indicator" class="space-y-2">
 
         <p class="text-xs uppercase tracking-wide text-content-muted">
-          Indicators
+          Indikatori
         </p>
 
         <div class="flex flex-wrap gap-2">
