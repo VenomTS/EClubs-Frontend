@@ -162,10 +162,6 @@ const loadAttendance = async () => {
               <h3 class="text-base font-semibold text-content-primary">
                 Attendance Overview
               </h3>
-
-              <p class="mt-1 text-sm text-content-muted">
-                Loaded dynamically when expanded
-              </p>
             </div>
 
             <Tag
