@@ -87,6 +87,13 @@ export interface GetWorkPlanResponse {
     'indicator'?: string;
     'realizationDate'?: string | null;
 }
+export interface JoinClubRequest {
+    'studentId'?: string;
+    'code'?: string;
+}
+export interface KickStudentRequest {
+    'studentId'?: string;
+}
 export interface LoginUserRequest {
     'mail'?: string;
     'password'?: string;
@@ -749,19 +756,14 @@ export const ClubsApiAxiosParamCreator = function (configuration?: Configuration
     return {
         /**
          * 
-         * @param {string} clubId 
-         * @param {string} studentId 
+         * @param {JoinClubRequest} joinClubRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        addStudentToClub: async (clubId: string, studentId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'clubId' is not null or undefined
-            assertParamExists('addStudentToClub', 'clubId', clubId)
-            // verify required parameter 'studentId' is not null or undefined
-            assertParamExists('addStudentToClub', 'studentId', studentId)
-            const localVarPath = `/api/Clubs/{clubId}/students/{studentId}`
-                .replace(`{${"clubId"}}`, encodeURIComponent(String(clubId)))
-                .replace(`{${"studentId"}}`, encodeURIComponent(String(studentId)));
+        addStudentToClub: async (joinClubRequest: JoinClubRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'joinClubRequest' is not null or undefined
+            assertParamExists('addStudentToClub', 'joinClubRequest', joinClubRequest)
+            const localVarPath = `/api/Clubs/join`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -773,11 +775,13 @@ export const ClubsApiAxiosParamCreator = function (configuration?: Configuration
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            localVarHeaderParameter['Content-Type'] = 'application/json';
             localVarHeaderParameter['Accept'] = 'text/plain,application/json,text/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(joinClubRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -821,18 +825,17 @@ export const ClubsApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @param {string} clubId 
-         * @param {string} studentId 
+         * @param {KickStudentRequest} kickStudentRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteStudentFromClub: async (clubId: string, studentId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        deleteStudentFromClub: async (clubId: string, kickStudentRequest: KickStudentRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'clubId' is not null or undefined
             assertParamExists('deleteStudentFromClub', 'clubId', clubId)
-            // verify required parameter 'studentId' is not null or undefined
-            assertParamExists('deleteStudentFromClub', 'studentId', studentId)
-            const localVarPath = `/api/Clubs/{clubId}/students/{studentId}`
-                .replace(`{${"clubId"}}`, encodeURIComponent(String(clubId)))
-                .replace(`{${"studentId"}}`, encodeURIComponent(String(studentId)));
+            // verify required parameter 'kickStudentRequest' is not null or undefined
+            assertParamExists('deleteStudentFromClub', 'kickStudentRequest', kickStudentRequest)
+            const localVarPath = `/api/Clubs/{clubId}/students`
+                .replace(`{${"clubId"}}`, encodeURIComponent(String(clubId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -844,11 +847,13 @@ export const ClubsApiAxiosParamCreator = function (configuration?: Configuration
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            localVarHeaderParameter['Content-Type'] = 'application/json';
             localVarHeaderParameter['Accept'] = 'text/plain,application/json,text/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(kickStudentRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -955,42 +960,6 @@ export const ClubsApiAxiosParamCreator = function (configuration?: Configuration
                 options: localVarRequestOptions,
             };
         },
-        /**
-         * 
-         * @param {File} [file] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        importClubs: async (file?: File, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/Clubs/import`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-            const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
-
-
-            if (file !== undefined) { 
-                localVarFormParams.append('file', file as any);
-            }
-            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = localVarFormParams;
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
     }
 };
 
@@ -1002,13 +971,12 @@ export const ClubsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {string} clubId 
-         * @param {string} studentId 
+         * @param {JoinClubRequest} joinClubRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async addStudentToClub(clubId: string, studentId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.addStudentToClub(clubId, studentId, options);
+        async addStudentToClub(joinClubRequest: JoinClubRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.addStudentToClub(joinClubRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ClubsApi.addStudentToClub']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1028,12 +996,12 @@ export const ClubsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} clubId 
-         * @param {string} studentId 
+         * @param {KickStudentRequest} kickStudentRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteStudentFromClub(clubId: string, studentId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteStudentFromClub(clubId, studentId, options);
+        async deleteStudentFromClub(clubId: string, kickStudentRequest: KickStudentRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteStudentFromClub(clubId, kickStudentRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ClubsApi.deleteStudentFromClub']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1074,18 +1042,6 @@ export const ClubsApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['ClubsApi.getStudentsInClub']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
-        /**
-         * 
-         * @param {File} [file] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async importClubs(file?: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.importClubs(file, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ClubsApi.importClubs']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
     }
 };
 
@@ -1097,13 +1053,12 @@ export const ClubsApiFactory = function (configuration?: Configuration, basePath
     return {
         /**
          * 
-         * @param {string} clubId 
-         * @param {string} studentId 
+         * @param {JoinClubRequest} joinClubRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        addStudentToClub(clubId: string, studentId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.addStudentToClub(clubId, studentId, options).then((request) => request(axios, basePath));
+        addStudentToClub(joinClubRequest: JoinClubRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.addStudentToClub(joinClubRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1117,12 +1072,12 @@ export const ClubsApiFactory = function (configuration?: Configuration, basePath
         /**
          * 
          * @param {string} clubId 
-         * @param {string} studentId 
+         * @param {KickStudentRequest} kickStudentRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteStudentFromClub(clubId: string, studentId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.deleteStudentFromClub(clubId, studentId, options).then((request) => request(axios, basePath));
+        deleteStudentFromClub(clubId: string, kickStudentRequest: KickStudentRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.deleteStudentFromClub(clubId, kickStudentRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1151,15 +1106,6 @@ export const ClubsApiFactory = function (configuration?: Configuration, basePath
         getStudentsInClub(clubId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<GetUserResponse>> {
             return localVarFp.getStudentsInClub(clubId, options).then((request) => request(axios, basePath));
         },
-        /**
-         * 
-         * @param {File} [file] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        importClubs(file?: File, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.importClubs(file, options).then((request) => request(axios, basePath));
-        },
     };
 };
 
@@ -1169,13 +1115,12 @@ export const ClubsApiFactory = function (configuration?: Configuration, basePath
 export class ClubsApi extends BaseAPI {
     /**
      * 
-     * @param {string} clubId 
-     * @param {string} studentId 
+     * @param {JoinClubRequest} joinClubRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public addStudentToClub(clubId: string, studentId: string, options?: RawAxiosRequestConfig) {
-        return ClubsApiFp(this.configuration).addStudentToClub(clubId, studentId, options).then((request) => request(this.axios, this.basePath));
+    public addStudentToClub(joinClubRequest: JoinClubRequest, options?: RawAxiosRequestConfig) {
+        return ClubsApiFp(this.configuration).addStudentToClub(joinClubRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1191,12 +1136,12 @@ export class ClubsApi extends BaseAPI {
     /**
      * 
      * @param {string} clubId 
-     * @param {string} studentId 
+     * @param {KickStudentRequest} kickStudentRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public deleteStudentFromClub(clubId: string, studentId: string, options?: RawAxiosRequestConfig) {
-        return ClubsApiFp(this.configuration).deleteStudentFromClub(clubId, studentId, options).then((request) => request(this.axios, this.basePath));
+    public deleteStudentFromClub(clubId: string, kickStudentRequest: KickStudentRequest, options?: RawAxiosRequestConfig) {
+        return ClubsApiFp(this.configuration).deleteStudentFromClub(clubId, kickStudentRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1227,16 +1172,6 @@ export class ClubsApi extends BaseAPI {
      */
     public getStudentsInClub(clubId: string, options?: RawAxiosRequestConfig) {
         return ClubsApiFp(this.configuration).getStudentsInClub(clubId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {File} [file] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    public importClubs(file?: File, options?: RawAxiosRequestConfig) {
-        return ClubsApiFp(this.configuration).importClubs(file, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

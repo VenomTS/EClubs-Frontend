@@ -83,10 +83,6 @@ const handleCreateClub = async (data: CreateClubModalData) => {
   }
 }
 
-const handleJoinClub = async (code: string) => {
-  console.log("Uđi u sekciju: " + code);
-}
-
 /* ---------------- LIFECYCLE ---------------- */
 onMounted(fetchClubs)
 </script>
@@ -184,7 +180,7 @@ onMounted(fetchClubs)
     <JoinClubModal
         v-if="showJoinModal"
         @close="showJoinModal = false"
-        @join="code => handleJoinClub(code)"
+        @join="fetchClubs"
     />
 
   </div>

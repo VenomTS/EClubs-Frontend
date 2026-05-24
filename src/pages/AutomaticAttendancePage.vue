@@ -49,7 +49,7 @@ onMounted(async () => {
       throw new Error("Nedostaju obavezni podaci")
     }
 
-    const result = await attendanceStore.markPresent(
+    const result = await attendanceStore.markAttendance(
         clubId,
         { studentId }
     )

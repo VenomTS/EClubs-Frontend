@@ -1,12 +1,19 @@
 <script setup lang="ts">
 import { ref, computed } from "vue"
 import BaseModal from "./BaseModal.vue"
+import {useClubStore} from "../../stores/club.store.ts";
+import {useUserStore} from "../../stores/user.store.ts";
+import {useToast} from "primevue";
 
 const emit = defineEmits(["close", "join"])
 
 const rawCode = ref("")
 const loading = ref(false)
 const submitted = ref(false)
+
+const clubStore = useClubStore()
+const userStore = useUserStore()
+const toast = useToast()
 
 /* -----------------------------
    FORMAT (XXX-XXX)
@@ -47,12 +54,39 @@ async function submit() {
 
   loading.value = true
 
-  await new Promise(r => setTimeout(r, 600))
-
   // emit CLEAN value (no dash)
-  emit("join", rawCode.value)
+  const response = await clubStore.joinClub({studentId: userStore.userId, code: rawCode.value});
 
   loading.value = false
+
+  if(!response.success) {
+    if(response.status === 404)
+      toast.add({
+        severity: "error",
+        summary: "Error", // PREVEDI
+        detail: "Invalid Code",
+        life: 3000,
+      });
+    else
+      toast.add({
+        severity: "warning",
+        summary: "Warning", // PREVEDI
+        detail: "Already a member",
+        life: 3000,
+      });
+    return;
+  }
+
+  toast.add({
+    severity: "success",
+    summary: "Success", // PREVEDI
+    detail: "Successfully joined the club",
+    life: 3000,
+  });
+
+  await new Promise(r => setTimeout(r, 600))
+
+  emit("join")
   emit("close")
 }
 </script>

@@ -1,5 +1,11 @@
 import {defineStore} from "pinia";
-import {ClubsApi, type CreateClubRequest, type GetClubResponse, type GetUserResponse} from "../../api";
+import {
+    ClubsApi,
+    type CreateClubRequest,
+    type GetClubResponse,
+    type GetUserResponse,
+    type JoinClubRequest, type KickStudentRequest
+} from "../../api";
 import {handleApi} from "./handleApi.ts";
 
 const clubsApi = new ClubsApi();
@@ -26,10 +32,18 @@ export const useClubStore = defineStore("club", () => {
             clubsApi.getStudentsInClub(clubId)
         );
 
+    const joinClub = (request: JoinClubRequest) =>
+        handleApi(() => clubsApi.addStudentToClub(request));
+
+    const kickFromClub = (clubId: string, request: KickStudentRequest) =>
+        handleApi(() => clubsApi.deleteStudentFromClub(clubId, request));
+
     return {
         getClubsByUserId,
         getClubById,
         createClub,
         getStudentsByClubId,
+        joinClub,
+        kickFromClub,
     };
 });
