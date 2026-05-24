@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type {GetClubResponse} from "../../../api";
+import UserIcon from "../Reusables/UserIcon.vue";
 
 const props = defineProps<{
   club: GetClubResponse
@@ -16,6 +17,10 @@ const professorFullName = computed(
     () =>
         `${props.club.professor!.firstName} ${props.club.professor!.lastName}`
 )
+
+const initials = computed(() => {
+  return `${props.club.professor!.firstName?.[0] ?? ''}${props.club.professor!.lastName?.[0] ?? ''}`;
+});
 
 const handleClick = () => {
   emit('select', props.club)
@@ -82,19 +87,7 @@ const handleClick = () => {
 
     <!-- Professor -->
     <div class="flex items-center gap-3">
-      <div
-          class="
-          w-10 h-10
-          rounded-full
-          bg-primary-500/20
-          flex items-center justify-center
-          text-primary-400
-          font-semibold
-        "
-      >
-        {{ club.professor!.firstName!.charAt(0) }}
-      </div>
-
+      <UserIcon :initials="initials" />
       <div>
         <p class="text-sm text-content-secondary">
           Profesor

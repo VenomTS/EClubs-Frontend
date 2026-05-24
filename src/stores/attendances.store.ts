@@ -17,8 +17,12 @@ export const useAttendanceStore = defineStore("attendance", () => {
             attendancesApi.markStudentPresent(clubId, attendance)
         );
 
+    const getUserAttendancesByClubId = (clubId: string, userId: string) =>
+        handleApi<GetAttendanceResponse>(() => attendancesApi.getUserAttendancesForClub(clubId, userId));
+
     return {
         getAttendancesByClubId,
         markAttendance,
+        getUserAttendancesByClubId
     };
 });

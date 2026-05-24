@@ -25,7 +25,7 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 
 export interface AttendanceHistoryResponse {
     'date'?: string;
-    'status'?: number;
+    'status'?: string;
 }
 export interface CreateClubRequest {
     'name'?: string;

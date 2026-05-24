@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue"
 import type { GetMessageResponse } from "../../../api"
+import UserIcon from "../Reusables/UserIcon.vue";
 
 const props = defineProps<{
   message: GetMessageResponse
@@ -20,6 +21,10 @@ const senderName = computed(() => {
   const s = props.message.sender
   return `${s.firstName} ${s.lastName}`
 })
+
+const initials = computed(() => {
+  return `${props.message.sender.firstName?.[0] ?? ''}${props.message.sender.lastName?.[0] ?? ''}`;
+});
 
 const formattedDate = computed(() => {
   if (!props.message.sentAt) return "—"
@@ -57,18 +62,7 @@ const handleDelete = () => emit("delete", props.message)
 
       <div class="flex items-center gap-3">
 
-        <!-- AVATAR -->
-        <div
-            class="
-            w-10 h-10 rounded-full
-            bg-primary-500/20
-            text-primary-400
-            flex items-center justify-center
-            font-semibold
-          "
-        >
-          {{ message.sender!.firstName!.charAt(0) }}
-        </div>
+        <UserIcon :initials="initials"/>
 
         <!-- INFO -->
         <div>

@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 import type { UserModel } from "../interfaces/UserModel.ts";
-import { AuthApi } from "../../api";
+import {AuthApi, type GetUserResponse} from "../../api";
 
 const authAPI = new AuthApi();
 
@@ -33,6 +33,14 @@ export const useUserStore = defineStore("user", () => {
     /* ---------------------------------- */
     /* Actions                            */
     /* ---------------------------------- */
+
+    function getUser(): GetUserResponse {
+        return {
+            id: user.value?.id,
+            firstName: user.value?.firstName,
+            lastName: user.value?.lastName
+        }
+    }
 
     async function init(): Promise<void> {
 
@@ -109,6 +117,7 @@ export const useUserStore = defineStore("user", () => {
         init,
         refreshUser,
         logout,
-        hasRole
+        hasRole,
+        getUser,
     };
 });

@@ -7,9 +7,11 @@ import {
 } from "../../api";
 import StreamTab from "../components/tabs/StreamTab.vue";
 import WorkPlanTab from "../components/tabs/WorkPlanTab.vue";
-import AttendanceTab from "../components/tabs/AttendanceTab.vue";
+import {useUserStore} from "../stores/user.store.ts";
+import StudentsTab from "../components/tabs/StudentsTab.vue";
 
 const clubsAPI = new ClubsApi();
+const userStore = useUserStore();
 const route = useRoute();
 const clubId = ref<string>("");
 const router = useRouter();
@@ -86,7 +88,7 @@ watch(
 
         <TabList class="bg-surface-card border border-surface-border rounded-lg px-2">
           <Tab value="stream">Strim</Tab>
-          <Tab value="workplans">Plan Rada</Tab>
+          <Tab value="workplans" v-if="userStore.hasRole('Professor')">Plan Rada</Tab>
           <Tab value="students">Učenici</Tab>
         </TabList>
 
@@ -101,7 +103,9 @@ watch(
           </TabPanel>
 
           <TabPanel value="students">
-            <AttendanceTab :clubId="clubId" :isOnlyStudent="false"/>
+            <KeepAlive>
+              <StudentsTab :club-id="clubId"/>
+            </KeepAlive>
           </TabPanel>
 
         </TabPanels>

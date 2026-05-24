@@ -50,7 +50,7 @@ const handleAttendance = async () => {
     if(attendance === undefined)
       return;
 
-    console.log(attendance.date); // Date Fri May 01 2026 00:00:00 GMT+0200 (Central European Summer Time)
+    console.log(attendance.date);
 
     const date = attendance.date.toLocaleDateString("en-CA");
     console.log(date) // 2026-04-30
@@ -61,10 +61,6 @@ const handleAttendance = async () => {
     emit("close");
     return;
   }
-
-
-
-  // Do this if not
 
 }
 
