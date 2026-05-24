@@ -4,7 +4,7 @@ import type { GetAttendanceResponse, GetUserResponse } from "../../../api";
 
 import { useAttendanceStore } from "../../stores/attendances.store.ts";
 
-import UserIcon from "../Reusables/UserIcon.vue";
+import UserIcon from "../reusables/UserIcon.vue";
 
 const props = defineProps<{
   clubId: string;

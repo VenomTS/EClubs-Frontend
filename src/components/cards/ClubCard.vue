@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type {GetClubResponse} from "../../../api";
-import UserIcon from "../Reusables/UserIcon.vue";
+import UserIcon from "../reusables/UserIcon.vue";
 
 const props = defineProps<{
   club: GetClubResponse

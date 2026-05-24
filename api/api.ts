@@ -54,7 +54,7 @@ export interface GetClubResponse {
     'professor'?: GetUserResponse;
     'name'?: string;
     'code'?: string;
-    'day'?: number;
+    'day'?: string;
     'startTime'?: string;
     'endTime'?: string;
 }

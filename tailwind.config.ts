@@ -11,32 +11,32 @@ export default {
             colors: {
 
                 /* ========================
-                   PRIMARY (modern green / tech)
+                   PRIMARY (slightly softened green)
                 ======================== */
                 primary: {
-                    50: '#eafff3',
-                    100: '#c8ffe1',
-                    200: '#90f5c2',
-                    300: '#4ee6a0',
+                    50: '#e9fff4',
+                    100: '#c6ffe3',
+                    200: '#8df5c5',
+                    300: '#4de6a2',
                     400: '#22d38a',
-                    500: '#16c47f', // more modern / distinct
-                    600: '#10a96c',
-                    700: '#0e8758',
-                    800: '#0c6a46',
-                    900: '#064a31'
+                    500: '#14b87a', // slightly toned down
+                    600: '#0f9a66',
+                    700: '#0f7d55',
+                    800: '#0e6144',
+                    900: '#0a4632'
                 },
 
                 /* ========================
-                   SECONDARY (cool tech blue)
+                   SECONDARY (muted tech blue)
                 ======================== */
                 secondary: {
-                    400: '#60a5fa',
+                    400: '#5b9cf5',
                     500: '#3b82f6',
                     600: '#2563eb'
                 },
 
                 /* ========================
-                   ACCENT (warm contrast highlight)
+                   ACCENT
                 ======================== */
                 accent: {
                     400: '#fbbf24',
@@ -45,29 +45,29 @@ export default {
                 },
 
                 /* ========================
-                   SURFACES (more depth layering)
+                   SURFACES (KEY FIX: raised + less dark)
                 ======================== */
                 surface: {
-                    background: '#050816', // deeper, richer base
-                    sidebar: '#070b1a',
-                    card: '#0b1226',
-                    elevated: '#111a33',
-                    hover: '#172554',
-                    border: '#1e2a44'
+                    background: '#0b1220', // was too close to black
+                    sidebar: '#0e1726',
+                    card: '#111a2e',
+                    elevated: '#16213a',
+                    hover: '#1d2a4a',
+                    border: '#26324d'
                 },
 
                 /* ========================
-                   TEXT (improved contrast hierarchy)
+                   TEXT (slightly softer contrast)
                 ======================== */
                 content: {
-                    primary: '#f8fafc',
+                    primary: '#f1f5f9',
                     secondary: '#cbd5e1',
                     muted: '#94a3b8',
                     disabled: '#64748b'
                 },
 
                 /* ========================
-                   STATUS COLORS (slightly refined)
+                   STATUS
                 ======================== */
                 success: {
                     500: '#22c55e',

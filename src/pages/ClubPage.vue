@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, watch } from "vue";
+import {computed, ref, watch} from "vue";
 import { useRoute , useRouter } from "vue-router";
 
 import {
@@ -19,6 +19,22 @@ const router = useRouter();
 const club = ref<GetClubResponse>({professor: {}});
 
 const formattedCode = ref<string>("");
+
+const translateClubDay = computed(() => {
+  switch(club.value.day)
+  {
+    case "Monday":
+      return "Ponedjeljak";
+    case "Tuesday":
+      return "Utorak";
+    case "Wednesday":
+      return "Srijeda";
+    case "Thursday":
+      return "Četvrtak";
+    case "Friday":
+      return "Petak";
+  }
+})
 
 watch(
     () => route.params.clubId,
@@ -49,7 +65,7 @@ watch(
         <!-- DAY -->
         <span class="flex items-center gap-1 px-2 py-1 rounded-md bg-surface-hover border border-surface-border">
           <i class="pi pi-calendar text-xs"></i>
-          {{ club.day }}
+          {{ translateClubDay }}
         </span>
 
         <!-- TIME RANGE -->
@@ -71,14 +87,6 @@ watch(
           <i class="pi pi-key text-xs"></i>
           Code: {{ formattedCode }}
         </span>
-        <button
-            @click="router.back()"
-            class="ml-auto flex items-center gap-2 px-4 py-2 rounded-md bg-surface-hover border border-surface-border text-content-primary hover:bg-surface-card transition"
-        >
-          <i class="pi pi-arrow-left"></i>
-          Nazad
-        </button>
-
 
       </div>
     </div>

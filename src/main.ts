@@ -25,11 +25,12 @@ import AccordionPanel from "primevue/accordionpanel"
 import AccordionHeader from "primevue/accordionheader"
 import AccordionContent from "primevue/accordioncontent"
 import {
+    Avatar,
     DatePicker,
     Divider,
     FileUpload,
     InputChips,
-    InputNumber,
+    InputNumber, Menu,
     ProgressBar,
     SelectButton,
     Textarea,
@@ -80,6 +81,8 @@ async function bootstrap()
     app.component("SelectButton", SelectButton);
     app.component("Divider", Divider);
     app.component("FileUpload", FileUpload);
+    app.component("Menu", Menu);
+    app.component("Avatar", Avatar);
 
 
     app.mount('#app');

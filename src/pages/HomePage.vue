@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import Menu from 'primevue/menu'
 
 import ClubCard from '../components/cards/ClubCard.vue'
 import CreateClubModal from '../components/modals/CreateClubModal.vue'
@@ -47,20 +46,6 @@ const fetchClubs = async () => {
 
   loading.value = false
 }
-
-
-const menu = ref()
-const items = [
-
-  {
-    label: 'Odjavi se',
-    icon: 'pi pi-sign-out',
-    command: () => {
-      userStore.logout?.()
-      router.push('/login')
-    }
-  }
-]
 /* ---------------- ACTIONS ---------------- */
 const handleClubSelect = (club: GetClubResponse) => {
   router.push(`/clubs/${club.id}`)
@@ -124,18 +109,6 @@ onMounted(fetchClubs)
                  border-none! text-content-primary!"
             @click="showJoinModal = true"
         />
-
-        <div class="relative">
-          <button
-              @click="menu.toggle($event)"
-              class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-hover border border-surface-border hover:bg-surface-card transition"
-          >
-            <i class="pi pi-user text-content-primary"></i>
-          </button>
-
-          <Menu ref="menu" :model="items" popup />
-        </div>
-
       </div>
     </div>
 
