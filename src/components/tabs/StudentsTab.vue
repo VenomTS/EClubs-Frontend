@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import {onActivated, ref} from "vue";
+import {onMounted, ref} from "vue";
 
 import StudentCard from "../cards/StudentCard.vue";
 import type {GetUserResponse} from "../../../api";
 import {useClubStore} from "../../stores/club.store.ts";
 import {useUserStore} from "../../stores/user.store.ts";
+import {useToast} from "primevue";
 
 const props = defineProps<{
   clubId: string;
@@ -14,6 +15,7 @@ const students = ref<GetUserResponse[]>([]);
 const loading = ref(false);
 const clubStore = useClubStore();
 const userStore = useUserStore();
+const toast = useToast();
 
 const loadStudents = async () => {
   try {
@@ -35,15 +37,32 @@ const handleRate = (student: GetUserResponse) => {
   console.log("Rate:", student.firstName);
 };
 
-const handleKick = (student: GetUserResponse) => {
-  console.log("Kick:", student.firstName);
+const handleKick = async (student: GetUserResponse) => {
+  const response = await clubStore.kickFromClub(props.clubId, { studentId: student.id });
+
+  if(response.success) {
+    toast.add({
+      severity: "success",
+      summary: "Kicked",
+      detail: "You successfully kicked " + student.firstName + " " + student.lastName,
+      life: 3000
+    });
+    await loadStudents();
+  }
+  else
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: "Could not kick the user",
+      life: 3000
+    })
 };
 
 const handleLeave = (student: GetUserResponse) => {
   console.log("Leave:", student.firstName);
 }
 
-onActivated(async () => {
+onMounted(async () => {
   await loadStudents();
 });
 </script>

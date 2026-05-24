@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {computed, ref, watch} from "vue";
-import { useRoute , useRouter } from "vue-router";
+import { useRoute  } from "vue-router";
 
 import {
   ClubsApi, type GetClubResponse
@@ -14,7 +14,6 @@ const clubsAPI = new ClubsApi();
 const userStore = useUserStore();
 const route = useRoute();
 const clubId = ref<string>("");
-const router = useRouter();
 
 const club = ref<GetClubResponse>({professor: {}});
 
@@ -111,9 +110,7 @@ watch(
           </TabPanel>
 
           <TabPanel value="students">
-            <KeepAlive>
-              <StudentsTab :club-id="clubId"/>
-            </KeepAlive>
+            <StudentsTab :club-id="clubId"/>
           </TabPanel>
 
         </TabPanels>
