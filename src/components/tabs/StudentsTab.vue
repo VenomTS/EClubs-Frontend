@@ -27,7 +27,7 @@ const loadStudents = async () => {
       students.value = response.data ?? [];
 
   } catch (error) {
-    console.error("Failed to load students", error);
+    console.error("Učitavanje studenata nije uspjelo", error);
   } finally {
     loading.value = false;
   }
@@ -43,8 +43,8 @@ const handleKick = async (student: GetUserResponse) => {
   if(response.success) {
     toast.add({
       severity: "success",
-      summary: "Kicked",
-      detail: "You successfully kicked " + student.firstName + " " + student.lastName,
+      summary: "Izbačen",
+      detail: "Uspješno ste izbacili " + student.firstName + " " + student.lastName,
       life: 3000
     });
     await loadStudents();
@@ -53,7 +53,7 @@ const handleKick = async (student: GetUserResponse) => {
     toast.add({
       severity: "error",
       summary: "Error",
-      detail: "Could not kick the user",
+      detail: "Greška pri izbacivanju korisnika",
       life: 3000
     })
 };
