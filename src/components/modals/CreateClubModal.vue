@@ -25,7 +25,7 @@ const meetingDays = [
 ]
 
 const periods = Array.from({ length: 8 }, (_, i) => ({
-  label: `${i + 1}${["st","nd","rd"][i] || "th"} period`,
+  label: `čas`,
   value: i + 1
 }))
 

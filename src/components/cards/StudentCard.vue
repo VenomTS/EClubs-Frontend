@@ -160,7 +160,7 @@ const loadAttendance = async () => {
           <div class="mb-4 flex items-center justify-between">
             <div>
               <h3 class="text-base font-semibold text-content-primary">
-                Attendance Overview
+                Pregled prisustva
               </h3>
             </div>
 
@@ -184,11 +184,11 @@ const loadAttendance = async () => {
 
             <div>
               <p class="font-medium text-content-primary">
-                Loading attendance...
+                Učitavanje prisustva...
               </p>
 
               <p class="text-sm text-content-muted">
-                Fetching latest attendance data
+                Učitavanje najnovijih podataka o prisustvu...
               </p>
             </div>
           </div>
@@ -204,17 +204,17 @@ const loadAttendance = async () => {
               <div class="mb-4 flex items-center justify-between">
                 <div>
                   <h4 class="text-base font-semibold text-content-primary">
-                    Attendance History
+                    Historija prisustva
                   </h4>
 
                   <p class="mt-1 text-sm text-content-muted">
-                    Recent attendance records
+                    Nedavni zapisi prisustva
                   </p>
                 </div>
 
                 <div class="text-right">
                   <p class="text-sm text-content-secondary">
-                    Presence Rate
+                    Prisutnost
                   </p>
 
                   <p class="text-xl font-bold text-primary-400">

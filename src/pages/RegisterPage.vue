@@ -110,11 +110,11 @@ const goToLogin = () => {
       <!-- Title -->
       <div class="text-center space-y-2">
         <h1 class="text-3xl font-bold text-primary-400">
-          Create Account
+          Kreiraj Nalog
         </h1>
 
         <p class="text-content-secondary text-sm">
-          Join us and get started
+          Pridruži se i započni
         </p>
       </div>
 
@@ -132,13 +132,13 @@ const goToLogin = () => {
 
         <!-- First Name -->
         <div class="flex flex-col gap-2">
-          <label class="text-sm text-content-secondary">First Name</label>
+          <label class="text-sm text-content-secondary">Ime</label>
           <InputText v-model="firstName" placeholder="John" />
         </div>
 
         <!-- Last Name -->
         <div class="flex flex-col gap-2">
-          <label class="text-sm text-content-secondary">Last Name</label>
+          <label class="text-sm text-content-secondary">Prezime</label>
           <InputText v-model="lastName" placeholder="Doe" />
         </div>
 
@@ -150,7 +150,7 @@ const goToLogin = () => {
 
         <!-- Password -->
         <div class="flex flex-col gap-2">
-          <label class="text-sm text-content-secondary">Password</label>
+          <label class="text-sm text-content-secondary">Šifra</label>
           <Password
               v-model="password"
               :feedback="true"
