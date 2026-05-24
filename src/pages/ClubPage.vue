@@ -85,9 +85,9 @@ watch(
       <Tabs value="stream">
 
         <TabList class="bg-surface-card border border-surface-border rounded-lg px-2">
-          <Tab value="stream">Stream</Tab>
-          <Tab value="workplans">WorkPlans</Tab>
-          <Tab value="students">Students</Tab>
+          <Tab value="stream">Strim</Tab>
+          <Tab value="workplans">Plan Rada</Tab>
+          <Tab value="students">Učenici</Tab>
         </TabList>
 
         <TabPanels class="mt-4">

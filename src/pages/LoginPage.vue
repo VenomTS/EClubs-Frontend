@@ -24,7 +24,7 @@ const toast = useToast();
 
 const validate = (): boolean => {
   if (!email.value || !password.value) {
-    errorMessage.value = "Email and password are required."
+    errorMessage.value = "Email i lozinka su obavezni."
     return false
   }
 
@@ -52,8 +52,8 @@ const login = async () => {
 
     toast.add({
       severity: "success",
-      summary: "Login Successful",
-      detail: "Redirecting to clubs...",
+      summary: "Login Uspješan",
+      detail: "Preusmjeravanje na sekcije...",
       life: 2000
     })
 
@@ -63,9 +63,9 @@ const login = async () => {
   }
   catch(error: any)
   {
-    errorMessage.value = "Unexpected error occurred";
+    errorMessage.value = "Došlo je do neočekivane greške";
     if(error?.response?.status === 401)
-      errorMessage.value = "Invalid email or password";
+      errorMessage.value = "Neispravan email ili lozinka";
   }
   finally
   {
@@ -107,11 +107,11 @@ const goToRegister = () =>
       <!-- Logo / Title -->
       <div class="text-center space-y-2">
         <h1 class="text-3xl font-bold text-primary-400">
-          Welcome Back
+          Dobrodošli
         </h1>
 
         <p class="text-content-secondary text-sm">
-          Sign in to continue
+          Prijavite se za nastavak
         </p>
       </div>
 
@@ -139,7 +139,7 @@ const goToRegister = () =>
           <InputText
               v-model="email"
               type="email"
-              placeholder="you@email.com"
+              placeholder="vi@email.com"
               class="w-full"
           />
         </div>
@@ -147,7 +147,7 @@ const goToRegister = () =>
         <!-- Password -->
         <div class="flex flex-col gap-2">
           <label class="text-content-secondary text-sm">
-            Password
+            Lozinka
           </label>
 
           <Password
@@ -181,24 +181,24 @@ const goToRegister = () =>
       <!-- Footer -->
       <div class="text-center text-sm text-content-muted space-y-2">
         <div>
-          Forgot password?
+          Zaboravili ste lozinku?
           <a
               href="#"
               class="text-primary-400 hover:text-primary-300 ml-1"
           >
-            Reset here
+            Resetuj ovdje
           </a>
         </div>
 
         <!-- REGISTER LINK -->
         <div>
-          Don’t have an account?
+          Nemate račun?
           <button
               type="button"
               @click="goToRegister"
               class="text-primary-400 hover:text-primary-300 ml-1 font-medium"
           >
-            Register
+            Registruj se
           </button>
         </div>
       </div>

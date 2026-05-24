@@ -84,7 +84,7 @@ const handleCreateClub = async (data: CreateClubModalData) => {
 }
 
 const handleJoinClub = async (code: string) => {
-  console.log("Join Club: " + code);
+  console.log("Uđi u sekciju: " + code);
 }
 
 /* ---------------- LIFECYCLE ---------------- */
@@ -99,11 +99,11 @@ onMounted(fetchClubs)
 
       <div>
         <h1 class="text-3xl font-bold text-primary-400">
-          My School Clubs
+          Moje Sekcije
         </h1>
 
         <p class="text-content-secondary mt-1">
-          Explore and manage your extracurricular activities
+          Istražite i upravljajte svojim vannastavnim aktivnostima
         </p>
 
       </div>
@@ -145,7 +145,7 @@ onMounted(fetchClubs)
 
     <!-- LOADING -->
     <div v-if="loading" class="text-content-muted">
-      Loading clubs...
+      Učitavanje sekcije...
     </div>
 
     <!-- EMPTY STATE -->
@@ -154,10 +154,10 @@ onMounted(fetchClubs)
         class="text-center py-24"
     >
       <p class="text-lg text-content-secondary">
-        No clubs yet
+        Nema sekcija
       </p>
       <p class="text-content-muted text-sm mt-1">
-        Join or create your first club
+        Pridruži se ili kreiraj svoj prvi klub
       </p>
     </div>
 

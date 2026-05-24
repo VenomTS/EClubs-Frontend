@@ -23,12 +23,12 @@ const authAPI = new AuthApi()
 
 const validate = (): boolean => {
   if (!firstName.value || !lastName.value || !email.value || !password.value) {
-    errorMessage.value = "All fields are required."
+    errorMessage.value = "Sva polja su potrebna."
     return false
   }
 
   if (password.value.length < 6) {
-    errorMessage.value = "Password must be at least 6 characters."
+    errorMessage.value = "Lozinka mora imati najmanje 6 znakova."
     return false
   }
 
@@ -56,8 +56,8 @@ const register = async () => {
 
     toast.add({
       severity: "success",
-      summary: "Account Created",
-      detail: "Redirecting to login...",
+      summary: "Nalog kreiran",
+      detail: "Preusmjeravanje na prijavu...",
       life: 2000
     })
 
@@ -67,9 +67,9 @@ const register = async () => {
 
   } catch (error: any) {
     if (error?.response?.status === 409) {
-      errorMessage.value = "Email already exists."
+      errorMessage.value = "Email već postoji."
     } else {
-      errorMessage.value = "Registration failed. Please try again."
+      errorMessage.value = "Registracija nije uspjela. Molimo pokušajte ponovo."
     }
   } finally {
     loading.value = false
