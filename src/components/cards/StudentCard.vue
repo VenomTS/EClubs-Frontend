@@ -84,7 +84,7 @@ const loadAttendance = async () => {
       attendance.value = response.data ?? null;
     }
 
-    loadedOnce.value = true;
+    // loadedOnce.value = true;
   } catch (error) {
     console.error('Failed to load attendance', error);
   } finally {

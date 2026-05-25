@@ -25,7 +25,11 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 
 export interface AttendanceHistoryResponse {
     'date'?: string;
-    'status'?: string;
+    'status'?: number;
+}
+export interface ConcludeWorkPlanRequest {
+    'workPlanId'?: string;
+    'date'?: string;
 }
 export interface CreateClubRequest {
     'name'?: string;
@@ -54,7 +58,7 @@ export interface GetClubResponse {
     'professor'?: GetUserResponse;
     'name'?: string;
     'code'?: string;
-    'day'?: string;
+    'day'?: number;
     'startTime'?: string;
     'endTime'?: string;
 }
@@ -1456,6 +1460,43 @@ export const WorkPlansApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 
          * @param {string} clubId 
+         * @param {ConcludeWorkPlanRequest} concludeWorkPlanRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        concludeWorkPlanForClub: async (clubId: string, concludeWorkPlanRequest: ConcludeWorkPlanRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'clubId' is not null or undefined
+            assertParamExists('concludeWorkPlanForClub', 'clubId', clubId)
+            // verify required parameter 'concludeWorkPlanRequest' is not null or undefined
+            assertParamExists('concludeWorkPlanForClub', 'concludeWorkPlanRequest', concludeWorkPlanRequest)
+            const localVarPath = `/api/clubs/{clubId}/WorkPlans/conclude`
+                .replace(`{${"clubId"}}`, encodeURIComponent(String(clubId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(concludeWorkPlanRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} clubId 
          * @param {CreateWorkPlanRequest} createWorkPlanRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1655,6 +1696,19 @@ export const WorkPlansApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} clubId 
+         * @param {ConcludeWorkPlanRequest} concludeWorkPlanRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async concludeWorkPlanForClub(clubId: string, concludeWorkPlanRequest: ConcludeWorkPlanRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.concludeWorkPlanForClub(clubId, concludeWorkPlanRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WorkPlansApi.concludeWorkPlanForClub']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {string} clubId 
          * @param {CreateWorkPlanRequest} createWorkPlanRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1736,6 +1790,16 @@ export const WorkPlansApiFactory = function (configuration?: Configuration, base
         /**
          * 
          * @param {string} clubId 
+         * @param {ConcludeWorkPlanRequest} concludeWorkPlanRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        concludeWorkPlanForClub(clubId: string, concludeWorkPlanRequest: ConcludeWorkPlanRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.concludeWorkPlanForClub(clubId, concludeWorkPlanRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} clubId 
          * @param {CreateWorkPlanRequest} createWorkPlanRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1796,6 +1860,17 @@ export class WorkPlansApi extends BaseAPI {
      */
     public batchCreateWorkPlanForClub(clubId: string, createWorkPlanRequest: Array<CreateWorkPlanRequest>, options?: RawAxiosRequestConfig) {
         return WorkPlansApiFp(this.configuration).batchCreateWorkPlanForClub(clubId, createWorkPlanRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} clubId 
+     * @param {ConcludeWorkPlanRequest} concludeWorkPlanRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public concludeWorkPlanForClub(clubId: string, concludeWorkPlanRequest: ConcludeWorkPlanRequest, options?: RawAxiosRequestConfig) {
+        return WorkPlansApiFp(this.configuration).concludeWorkPlanForClub(clubId, concludeWorkPlanRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

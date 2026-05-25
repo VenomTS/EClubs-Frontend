@@ -33,9 +33,7 @@ const groupedPlans = computed(() => {
     groups[key].push(plan)
   }
 
-  return Object.entries(groups).sort((a, b) =>
-      a[0].localeCompare(b[0])
-  )
+  return Object.entries(groups)
 })
 
 /* ---------------- ACCORDION STATE ---------------- */

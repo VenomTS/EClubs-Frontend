@@ -1,5 +1,8 @@
 import {defineStore} from "pinia";
-import {type CreateWorkPlanRequest, type GetDomainsResponse, type GetWorkPlanResponse, WorkPlansApi} from "../../api";
+import {
+    type ConcludeWorkPlanRequest,
+    type CreateWorkPlanRequest, type GetDomainsResponse, type GetWorkPlanResponse, WorkPlansApi
+} from "../../api";
 import {handleApi} from "./handleApi.ts";
 
 // const messagesApi = new MessagesApi();
@@ -30,11 +33,15 @@ export const useWorkPlansStore = defineStore("workplans", () => {
     const uploadWorkPlan = (clubId: string, file: File) =>
         handleApi(() => workPlansApi.uploadWorkPlansForClub(clubId, file))
 
+    const concludeWorkPlan = (clubId: string, workPlan: ConcludeWorkPlanRequest) =>
+        handleApi(() => workPlansApi.concludeWorkPlanForClub(clubId, workPlan))
+
     return {
         getWorkPlansByClubId,
         getCurrentWorkPlan,
         getDomainsByClubId,
         createWorkPlan,
         uploadWorkPlan,
+        concludeWorkPlan,
     };
 });

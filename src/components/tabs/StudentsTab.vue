@@ -6,6 +6,7 @@ import type {GetUserResponse} from "../../../api";
 import {useClubStore} from "../../stores/club.store.ts";
 import {useUserStore} from "../../stores/user.store.ts";
 import {useToast} from "primevue";
+import {useRouter} from "vue-router";
 
 const props = defineProps<{
   clubId: string;
@@ -16,6 +17,7 @@ const loading = ref(false);
 const clubStore = useClubStore();
 const userStore = useUserStore();
 const toast = useToast();
+const router = useRouter();
 
 const loadStudents = async () => {
   try {
@@ -58,8 +60,25 @@ const handleKick = async (student: GetUserResponse) => {
     })
 };
 
-const handleLeave = (student: GetUserResponse) => {
-  console.log("Leave:", student.firstName);
+const handleLeave = async (student: GetUserResponse) => {
+  const response = await clubStore.kickFromClub(props.clubId, { studentId: student.id });
+
+  if(response.success) {
+    toast.add({
+      severity: "success",
+      summary: "Left",
+      detail: "You left the club",
+      life: 3000
+    });
+    await router.push("/");
+  }
+  else
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: "Could not leave the club",
+      life: 3000
+    });
 }
 
 onMounted(async () => {

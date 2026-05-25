@@ -3,11 +3,10 @@ import { onMounted, ref } from "vue"
 import BaseModal from "./BaseModal.vue"
 import { useClubStore } from "../../stores/club.store.ts"
 
-import type { GetUserResponse } from "../../../api"
+import type {GetUserResponse} from "../../../api"
 import ManualAttendance from "../attendance/ManualAttendance.vue";
 import AutomaticAttendance from "../attendance/AutomaticAttendance.vue";
 import {useAttendanceStore} from "../../stores/attendances.store.ts";
-import {useRouter} from "vue-router";
 
 /* ---------------------------------
    PROPS
@@ -21,6 +20,7 @@ const props = defineProps<{
 ---------------------------------- */
 const emit = defineEmits<{
   (e: "close"): void
+  (e: "conclude", date: string): void
 }>()
 
 /* ---------------------------------
@@ -36,7 +36,6 @@ const students = ref<GetUserResponse[]>([])
 const mode = ref<"manual" | "automatic">("manual")
 
 const manualAttendanceRef = ref<InstanceType<typeof ManualAttendance> | null>(null)
-const router = useRouter()
 
 /* ---------------------------------
    FUNCTIONS
@@ -44,27 +43,21 @@ const router = useRouter()
 const handleAttendance = async () => {
 
   // Do this if professor is doing it manually
+  let date;
   if(mode.value === "manual") {
     const attendance = manualAttendanceRef.value?.getAttendance()
-
-    console.log(attendance)
 
     if(attendance === undefined)
       return;
 
-    console.log(attendance.date);
-
-    const date = attendance.date.toLocaleDateString("en-CA");
-    console.log(date) // 2026-04-30
+    date = attendance.date.toLocaleDateString("en-CA");
 
     for(const att of attendance.records) {
       await attendanceStore.markAttendance(props.clubId, { studentId: att.studentId, date: date, status: att.status === "present" ? 0 : 1 });
     }
-    emit("close");
-    router.go(0);
-    return;
   }
 
+  emit("conclude", mode.value === "manual" ? date! : new Date().toLocaleDateString("en-CA"));
 }
 
 /* ---------------------------------

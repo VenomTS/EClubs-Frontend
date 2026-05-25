@@ -9,6 +9,7 @@ import CurrentWorkPlanTab from "../workplans/CurrentWorkPlanTab.vue";
 import AllWorkPlansTab from "../workplans/AllWorkPlansTab.vue";
 import CreateWorkPlanModal from "../modals/CreateWorkPlanModal.vue";
 import TakeAttendanceModal from "../modals/TakeAttendanceModal.vue";
+import {useToast} from "primevue";
 
 const route = useRoute()
 const workPlansStore = useWorkPlansStore()
@@ -19,6 +20,7 @@ const fileUploadRef = ref();
 
 const showCreateWorkPlanModal = ref<boolean>(false);
 const showTakeAttendanceModal = ref<boolean>(false);
+const toast = useToast();
 
 /* ---------------- STATE (OWNED HERE) ---------------- */
 const workPlans = ref<GetWorkPlanResponse[]>([])
@@ -91,6 +93,25 @@ const onUpload = async (event: any) => {
   await workPlansStore.uploadWorkPlan(clubId, file);
 
   await loadData()
+}
+
+const concludeAttendanceTaking = async (date: string) => {
+
+  await workPlansStore.concludeWorkPlan(clubId, {
+    workPlanId: currentWorkPlan.value?.id,
+    date: date
+  });
+
+  showTakeAttendanceModal.value = false;
+
+  toast.add({
+    severity: "success",
+    summary: "Realized",
+    detail: "Work plan successfully realized",
+    life: 2000
+  });
+
+  await loadData();
 }
 
 /* ---------------- INIT ---------------- */
@@ -179,8 +200,10 @@ onMounted(loadData)
 
         <TakeAttendanceModal
             :clubId="clubId"
+            :currentWorkPlan="currentWorkPlan!"
             v-if="showTakeAttendanceModal"
             @close="showTakeAttendanceModal = false"
+            @conclude="date => concludeAttendanceTaking(date)"
         />
       </div>
 
