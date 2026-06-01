@@ -9,6 +9,7 @@ import StreamTab from "../components/tabs/StreamTab.vue";
 import WorkPlanTab from "../components/tabs/WorkPlanTab.vue";
 import {useUserStore} from "../stores/user.store.ts";
 import StudentsTab from "../components/tabs/StudentsTab.vue";
+import ReportTab from "../components/tabs/ReportTab.vue";
 
 const clubsAPI = new ClubsApi();
 const userStore = useUserStore();
@@ -97,6 +98,7 @@ watch(
           <Tab value="stream">Strim</Tab>
           <Tab value="workplans" v-if="userStore.hasRole('Professor')">Plan Rada</Tab>
           <Tab value="students">Učenici</Tab>
+          <Tab value="reports" v-if="!userStore.hasRole('Student')">Reports</Tab>
         </TabList>
 
         <TabPanels class="mt-4">
@@ -111,6 +113,10 @@ watch(
 
           <TabPanel value="students">
             <StudentsTab :club-id="clubId"/>
+          </TabPanel>
+
+          <TabPanel value="reports">
+            <ReportTab :club-id="clubId"/>
           </TabPanel>
 
         </TabPanels>

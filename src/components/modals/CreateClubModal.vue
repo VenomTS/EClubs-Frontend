@@ -25,7 +25,7 @@ const meetingDays = [
 ]
 
 const periods = Array.from({ length: 8 }, (_, i) => ({
-  label: `čas`,
+  label: `${i + 1}. Čas`,
   value: i + 1
 }))
 

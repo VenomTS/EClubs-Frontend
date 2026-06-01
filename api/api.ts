@@ -78,6 +78,16 @@ export interface GetMessageResponse {
     'content'?: string;
     'sentAt'?: string;
 }
+export interface GetReportsResponse {
+    'id'?: string;
+    'workPlan'?: GetWorkPlanResponse;
+    'professor'?: GetUserResponse;
+    'presentCount'?: number;
+    'absentCount'?: number;
+    'present'?: string;
+    'absent'?: string;
+    'date'?: string;
+}
 export interface GetUserResponse {
     'id'?: string;
     'firstName'?: string;
@@ -119,6 +129,7 @@ export interface RegisterUserRequest {
     'lastName'?: string;
     'mail'?: string;
     'password'?: string;
+    'isStudent'?: boolean;
 }
 export interface UpdateMessageRequest {
     'content'?: string;
@@ -1410,6 +1421,104 @@ export class MessagesApi extends BaseAPI {
      */
     public updateMessageById(messageId: string, updateMessageRequest: UpdateMessageRequest, options?: RawAxiosRequestConfig) {
         return MessagesApiFp(this.configuration).updateMessageById(messageId, updateMessageRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * ReportsApi - axios parameter creator
+ */
+export const ReportsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} [clubId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getReportsByClubId: async (clubId?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/Reports`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (clubId !== undefined) {
+                localVarQueryParameter['ClubId'] = clubId;
+            }
+
+            localVarHeaderParameter['Accept'] = 'text/plain,application/json,text/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * ReportsApi - functional programming interface
+ */
+export const ReportsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = ReportsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} [clubId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getReportsByClubId(clubId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetReportsResponse>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getReportsByClubId(clubId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ReportsApi.getReportsByClubId']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * ReportsApi - factory interface
+ */
+export const ReportsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ReportsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} [clubId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getReportsByClubId(clubId?: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<GetReportsResponse>> {
+            return localVarFp.getReportsByClubId(clubId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * ReportsApi - object-oriented interface
+ */
+export class ReportsApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} [clubId] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getReportsByClubId(clubId?: string, options?: RawAxiosRequestConfig) {
+        return ReportsApiFp(this.configuration).getReportsByClubId(clubId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

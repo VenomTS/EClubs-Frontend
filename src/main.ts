@@ -31,7 +31,7 @@ import {
     FileUpload,
     InputChips,
     InputNumber, Menu,
-    ProgressBar,
+    ProgressBar, RadioButton,
     SelectButton,
     Textarea,
     ToastService
@@ -83,6 +83,7 @@ async function bootstrap()
     app.component("FileUpload", FileUpload);
     app.component("Menu", Menu);
     app.component("Avatar", Avatar);
+    app.component("RadioButton", RadioButton);
 
 
     app.mount('#app');
